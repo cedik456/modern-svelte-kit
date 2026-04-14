@@ -1,32 +1,29 @@
 <script lang="ts">
+	import { medals } from '$lib/data/medals';
+	import type { Medal } from '$lib/types/medal';
+	import { fade, scale } from 'svelte/transition';
+
 	const filters = ['All Medals', 'Marathons', 'Triathlons', 'Ironmans'] as const;
 	let active = $state<(typeof filters)[number]>('All Medals');
 
-	const medals = [
-		{ title: 'Milo Half Marathon', tag: 'Collection Item' },
-		{ title: 'Legazpi Half Marathon', tag: 'Collection Item' },
-		{ title: 'Charity Run 2025', tag: 'Collection Item' },
-		{ title: 'Gubat Half Marathon', tag: 'Collection Item' },
-		{ title: 'Cagsawa Half Marathon', tag: 'Collection Item' },
-		{ title: 'Sorsogon Halloween Night Run 2025', tag: 'Collection Item' },
-		{ title: 'Albay Half Marathon', tag: 'Collection Item' },
-		{ title: 'Trenta', tag: 'Collection Item' }
-	];
-
-	function cardGradient(i: number) {
-		const gradients = [
-			'from-amber-500/25 via-zinc-900 to-zinc-950',
-			'from-sky-500/20 via-zinc-900 to-zinc-950',
-			'from-orange-500/20 via-zinc-900 to-zinc-950',
-			'from-yellow-500/15 via-zinc-900 to-zinc-950',
-			'from-emerald-500/15 via-zinc-900 to-zinc-950',
-			'from-zinc-400/10 via-zinc-900 to-zinc-950',
-			'from-rose-500/15 via-zinc-900 to-zinc-950',
-			'from-cyan-500/15 via-zinc-900 to-zinc-950'
-		];
-		return gradients[i % gradients.length];
+	function getCardSrc(medal: Medal) {
+		return medal.thumbnailSrc ?? medal.src ?? medal.fullSrc;
 	}
+
+	function getModalSrc(medal: Medal) {
+		return medal.fullSrc ?? medal.src ?? medal.thumbnailSrc;
+	}
+
+	function getCardSrcSet(medal: Medal) {
+		const largeSrc = medal.fullSrc ?? medal.src;
+		if (!medal.thumbnailSrc || !largeSrc || medal.thumbnailSrc === largeSrc) return undefined;
+		return `${medal.thumbnailSrc} 720w, ${largeSrc} 1200w`;
+	}
+
+	let selectedMedal = $state<Medal | null>(null);
 </script>
+
+<svelte:window onkeydown={(event) => event.key === 'Escape' && (selectedMedal = null)} />
 
 <section class="relative">
 	<div
@@ -61,19 +58,110 @@
 		</div>
 
 		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-			{#each medals as medal, i}
-				<article class="group cursor-pointer">
-					<div
-						class={'aspect-square overflow-hidden rounded-md bg-gradient-to-br ring-1 ring-inset ring-white/10 transition will-change-transform group-hover:scale-[1.01] ' +
-							cardGradient(i)}
-					>
-						<div class="h-full w-full bg-black/10"></div>
-					</div>
+			{#each medals as medal}
+				<button
+					type="button"
+					class="group cursor-pointer text-left"
+					onclick={() => (selectedMedal = medal)}
+				>
+					<article>
+						<div class="aspect-square overflow-hidden rounded-md ring-1 ring-inset ring-white/10">
+							{#if getCardSrc(medal)}
+								<img
+									src={getCardSrc(medal)}
+									srcset={getCardSrcSet(medal)}
+									sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+									alt={medal.title}
+									class="h-full w-full object-cover transition will-change-transform group-hover:scale-[1.01]"
+									loading="lazy"
+									decoding="async"
+								/>
+							{:else}
+								<div
+									class="flex h-full w-full items-center justify-center bg-zinc-900 text-[10px] font-medium uppercase tracking-[0.18em] text-zinc-500"
+								>
+									Coming Soon
+								</div>
+							{/if}
+						</div>
 
-					<!-- <p class="mt-3 text-[10px] uppercase tracking-[0.22em] text-zinc-500">{medal.tag}</p> -->
-					<h3 class="mt-2 text-sm font-medium text-zinc-100">{medal.title}</h3>
-				</article>
+						<!-- <p class="mt-3 text-[10px] uppercase tracking-[0.22em] text-zinc-500">{medal.tag}</p> -->
+						<h3 class="mt-2 text-sm font-medium text-zinc-100">{medal.title}</h3>
+					</article>
+				</button>
 			{/each}
 		</div>
 	</div>
 </section>
+
+{#if selectedMedal}
+	<div class="fixed inset-0 z-70" transition:fade={{ duration: 100 }}>
+		<button
+			type="button"
+			class="absolute inset-0 bg-black/55 backdrop-blur-[1px]"
+			aria-label="Close medal preview"
+			onclick={() => (selectedMedal = null)}
+		></button>
+
+		<div
+			class="relative z-10 mx-auto flex min-h-full max-w-4xl items-center px-4 py-8 sm:px-6 lg:px-8"
+		>
+			<div
+				role="dialog"
+				aria-modal="true"
+				aria-label={selectedMedal.title}
+				class="w-full overflow-hidden rounded-2xl border border-white/10 bg-zinc-950/85 shadow-2xl shadow-black/50 ring-1 ring-white/5 md:h-[22rem]"
+				transition:scale={{ duration: 140, start: 0.98 }}
+			>
+				<div class="grid h-full gap-0 md:grid-cols-[1.05fr_1fr]">
+					<div class="relative h-72 overflow-hidden bg-zinc-900 md:h-full">
+						{#if getModalSrc(selectedMedal)}
+							<img
+								src={getModalSrc(selectedMedal)}
+								alt={selectedMedal.title}
+								class="h-full w-full object-cover"
+								loading="eager"
+								fetchpriority="high"
+								decoding="async"
+							/>
+						{:else}
+							<div
+								class="flex h-full w-full items-center justify-center bg-zinc-900 text-xs font-medium uppercase tracking-[0.18em] text-zinc-500"
+							>
+								Coming Soon
+							</div>
+						{/if}
+						<div
+							class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"
+						></div>
+					</div>
+
+					<div class="flex flex-col border-t border-white/10 p-6 sm:p-8 md:border-t-0 md:border-l">
+						<div class="flex items-start gap-4">
+							<div>
+								<p class="text-[10px] uppercase tracking-[0.22em] text-zinc-500">
+									{selectedMedal.tag}
+								</p>
+								<h2 class="mt-2 text-2xl font-semibold tracking-tight text-zinc-100">
+									{selectedMedal.title}
+								</h2>
+							</div>
+							<button
+								type="button"
+								class="ml-auto rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-zinc-300 hover:bg-white/10 hover:text-white"
+								onclick={() => (selectedMedal = null)}
+							>
+								Close
+							</button>
+						</div>
+
+						<p class="mt-6 text-sm leading-relaxed text-zinc-400">
+							A focused preview for this medal in your archive. Add event details, distance, finish
+							time, and notes here as your collection grows.
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{/if}
