@@ -39,7 +39,9 @@
 				</p>
 			</div>
 
-			<div class="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
+			<div
+				class="-mx-4 overflow-x-auto overflow-y-hidden px-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:px-0"
+			>
 				<div class="flex w-max items-center gap-2 sm:w-auto sm:flex-wrap">
 					{#each filters as f}
 						<button
