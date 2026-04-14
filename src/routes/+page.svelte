@@ -35,7 +35,7 @@
 			<div>
 				<h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">Collection</h1>
 				<p class="mt-3 max-w-2xl text-sm leading-relaxed text-zinc-400">
-					A curated archive of historical honors through the lens of architectural modernism.
+					An archive of every race I’ve been in.
 				</p>
 			</div>
 
@@ -87,12 +87,24 @@
 
 						<!-- <p class="mt-3 text-[10px] uppercase tracking-[0.22em] text-zinc-500">{medal.tag}</p> -->
 						<h3 class="mt-2 text-sm font-medium text-zinc-100">{medal.title}</h3>
+						{#if medal.distanceLabel}
+							<p class="mt-1 text-xs text-zinc-400">{medal.distanceLabel}</p>
+						{/if}
 					</article>
 				</button>
 			{/each}
 		</div>
 	</div>
 </section>
+
+<a
+	href="https://www.strava.com"
+	target="_blank"
+	rel="noopener noreferrer"
+	class="fixed bottom-5 right-8 z-60 inline-flex items-center rounded-full border border-[#FC4C02]/50 bg-[#FC4C02]/15 px-4 py-2 text-xs font-semibold text-[#FC4C02] shadow-lg shadow-black/30 backdrop-blur-sm transition hover:bg-[#FC4C02]/25 sm:bottom-6 sm:right-6"
+>
+	Follow me on Strava
+</a>
 
 {#if selectedMedal}
 	<div class="fixed inset-0 z-70" transition:fade={{ duration: 100 }}>

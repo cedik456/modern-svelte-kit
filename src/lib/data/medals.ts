@@ -2,89 +2,112 @@ import type { Medal } from '$lib/types/medal';
 
 export const medals: Medal[] = [
 	{
-		title: 'Milo Half Marathon',
+		title: 'The Epic Glow Night Run',
 		tag: 'Collection Item',
-		src: '/medals/milo_half_2025.png',
-		thumbnailSrc: '/medals/milo_half_2025.png',
-		fullSrc: '/medals/milo_half_2025.png'
-	},
-	{
-		title: 'Love Run Half Marathon',
-		tag: 'Collection Item',
-		src: '/medals/love_run_2025.png',
-		thumbnailSrc: '/medals/love_run_2025.png',
-		fullSrc: '/medals/love_run_2025.png'
+		distanceLabel: '10 Kilometer Run',
+		src: '/medals/glow_run_2025.webp',
+		thumbnailSrc: '/medals/glow_run_2025-thumb.webp',
+		fullSrc: '/medals/glow_run_2025.webp'
 	},
 	{
 		title: 'Legazpi Half Marathon',
 		tag: 'Collection Item',
+		distanceLabel: 'Half Marathon',
 		src: '/medals/legazpi_half_2025.webp',
 		thumbnailSrc: '/medals/legazpi_half_2025-thumb.webp',
 		fullSrc: '/medals/legazpi_half_2025.webp'
 	},
 	{
-		title: 'Charity Run 2025',
+		title: 'Pinangat Festival 10 miler run',
 		tag: 'Collection Item',
-		src: '/medals/charity_run_2025.png',
-		thumbnailSrc: '/medals/charity_run_2025.png',
-		fullSrc: '/medals/charity_run_2025.png'
+		distanceLabel: '10-Mile Run',
+		src: '/medals/10_miler_2025.webp',
+		thumbnailSrc: '/medals/10_miler_2025-thumb.webp',
+		fullSrc: '/medals/10_miler_2025.webp'
 	},
 	{
 		title: 'Gubat Half Marathon',
 		tag: 'Collection Item',
-		src: '/medals/gubat_half_2025.png',
-		thumbnailSrc: '/medals/gubat_half_2025.png',
-		fullSrc: '/medals/gubat_half_2025.png'
+		distanceLabel: 'Half Marathon',
+		src: '/medals/gubat_half_2025.webp',
+		thumbnailSrc: '/medals/gubat_half_2025.webp',
+		fullSrc: '/medals/gubat_half_2025.webp'
 	},
 	{
-		title: 'Cagsawa Half Marathon',
+		title: 'Milo Half Marathon',
 		tag: 'Collection Item',
-		src: '/medals/cagsawa_half_2025.png',
-		thumbnailSrc: '/medals/cagsawa_half_2025.png',
-		fullSrc: '/medals/cagsawa_half_2025.png'
-	},
-	{
-		title: 'Strides and Shine 2025',
-		tag: 'Collection Item',
-		src: '/medals/strides_shine_2025.png',
-		thumbnailSrc: '/medals/strides_shine_2025.png',
-		fullSrc: '/medals/strides_shine_2025.png'
+		distanceLabel: 'Half Marathon',
+		src: '/medals/milo_half_2025.webp',
+		thumbnailSrc: '/medals/milo_half_2025-thumb.webp',
+		fullSrc: '/medals/milo_half_2025.webp'
 	},
 	{
 		title: 'Sorsogon Halloween night Run',
 		tag: 'Collection Item',
-		src: '/medals/sorsogon_halloween_2025.png',
-		thumbnailSrc: '/medals/sorsogon_halloween_2025.png',
-		fullSrc: '/medals/sorsogon_halloween_2025.png'
+		distanceLabel: '10 Kilometer Run',
+		src: '/medals/haloween_run_2025.webp',
+		thumbnailSrc: '/medals/haloween_run_2025-thumb.webp',
+		fullSrc: '/medals/haloween_run_2025.webp'
 	},
 	{
-		title: 'The Epic Glow Night Run',
+		title: 'Sorsogon Half Marathon',
 		tag: 'Collection Item',
-		src: '/medals/epic_glow_night_2025.png',
-		thumbnailSrc: '/medals/epic_glow_night_2025.png',
-		fullSrc: '/medals/epic_glow_night_2025.png'
+		distanceLabel: 'Half Marathon',
+		src: '/medals/sorsogon_half_2025.webp',
+		thumbnailSrc: '/medals/sorsogon_half_2025-thumb.webp',
+		fullSrc: '/medals/sorsogon_half_2025.webp'
 	},
 	{
 		title: 'Albay Half Marathon',
 		tag: 'Collection Item',
+		distanceLabel: 'Half Marathon',
 		src: '/medals/albay_half_2025.webp',
 		thumbnailSrc: '/medals/albay_half_2025-thumb.webp',
 		fullSrc: '/medals/albay_half_2025.webp'
 	},
 	{
-		title: 'Trenta',
+		title: 'Charity Run 2025',
 		tag: 'Collection Item',
-		src: '/medals/trenta_2026.png',
-		thumbnailSrc: '/medals/trenta_2026.png',
-		fullSrc: '/medals/trenta_2026.png'
+		distanceLabel: '25 Kilometer Run',
+		src: '/medals/charity_run_2025.webp',
+		thumbnailSrc: '/medals/charity_run_2025-thumb.webp',
+		fullSrc: '/medals/charity_run_2025.webp'
 	},
 	{
-		title: 'Sorsogon Half Marathon',
+		title: 'Trenta',
 		tag: 'Collection Item',
-		src: '/medals/sorsogon_half_2025.png',
-		thumbnailSrc: '/medals/sorsogon_half_2025.png',
-		fullSrc: '/medals/sorsogon_half_2025.png'
+		distanceLabel: '30 Kilometer Run',
+		src: '/medals/trenta_2026.webp',
+		thumbnailSrc: '/medals/trenta_2026-thumb.webp',
+		fullSrc: '/medals/trenta_2026.webp'
 	},
-	{ title: 'Ciudad de Sorsogon Marathon', tag: 'Collection Item' },
-	{ title: 'Albay Marathon 2026', tag: 'Collection Item' }
+	{
+		title: 'Love Run Half Marathon',
+		tag: 'Collection Item',
+		distanceLabel: 'Half Marathon',
+		src: '/medals/love_run_2025.webp',
+		thumbnailSrc: '/medals/love_run_2025.webp',
+		fullSrc: '/medals/love_run_2025.webp'
+	},
+	{
+		title: 'Cagsawa Half Marathon',
+		tag: 'Collection Item',
+		distanceLabel: 'Half Marathon',
+		src: '/medals/cagsawa_half_2025.webp',
+		thumbnailSrc: '/medals/cagsawa_half_2025-thumb.webp',
+		fullSrc: '/medals/cagsawa_half_2025.webp'
+	},
+	{
+		title: 'Strides and Shine 2025',
+		tag: 'Collection Item',
+		distanceLabel: '16 Kilometer Run'
+		// src: '/medals/strides_shine_2025.webp',
+		// thumbnailSrc: '/medals/strides_shine_2025-thumb.webp',
+		// fullSrc: '/medals/strides_shine_2025.webp'
+	},
+	{
+		title: 'Ciudad de Sorsogon Marathon',
+		tag: 'Collection Item',
+		distanceLabel: 'Full Marathon'
+	}
 ];
