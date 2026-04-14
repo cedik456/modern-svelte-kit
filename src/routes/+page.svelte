@@ -3,7 +3,7 @@
 	import type { Medal } from '$lib/types/medal';
 	import { fade, scale } from 'svelte/transition';
 
-	const filters = ['All Medals', 'Marathons', 'Triathlons', 'Ironmans'] as const;
+	const filters = ['All Medals', 'Marathons', 'Triathlons', 'Ironmans', 'Others'] as const;
 	let active = $state<(typeof filters)[number]>('All Medals');
 
 	function getCardSrc(medal: Medal) {
@@ -151,12 +151,12 @@
 					<div class="flex flex-col border-t border-white/10 p-6 sm:p-8 md:border-t-0 md:border-l">
 						<div class="flex items-start gap-4">
 							<div>
-								<p class="text-[10px] uppercase tracking-[0.22em] text-zinc-500">
-									{selectedMedal.tag}
-								</p>
-								<h2 class="mt-2 text-2xl font-semibold tracking-tight text-zinc-100">
+								<h2 class="text-2xl font-semibold tracking-tight text-zinc-100">
 									{selectedMedal.title}
 								</h2>
+								{#if selectedMedal.distanceLabel}
+									<p class="mt-2 text-sm text-zinc-300">{selectedMedal.distanceLabel}</p>
+								{/if}
 							</div>
 							<button
 								type="button"
@@ -167,9 +167,45 @@
 							</button>
 						</div>
 
-						<p class="mt-6 text-sm leading-relaxed text-zinc-400">
-							A focused preview for this medal in your archive. Add event details, distance, finish
-							time, and notes here as your collection grows.
+						<div class="mt-5 space-y-2 text-sm text-zinc-300">
+							<p>
+								<span class="text-zinc-500">Date:</span>
+								{selectedMedal.eventDate ?? 'To be added'}
+							</p>
+							<p>
+								<span class="text-zinc-500">Location:</span>
+								{selectedMedal.location ?? 'To be added'}
+							</p>
+							<p>
+								<span class="text-zinc-500">Finish Time:</span>
+								{selectedMedal.finishTime ?? 'To be added'}
+							</p>
+							<p>
+								<span class="text-zinc-500">Pace / Result:</span>
+								{#if selectedMedal.pace || selectedMedal.placement}
+									{selectedMedal.pace ?? '—'}{selectedMedal.placement
+										? ` • ${selectedMedal.placement}`
+										: ''}
+								{:else}
+									To be added
+								{/if}
+							</p>
+						</div>
+
+						{#if selectedMedal.stravaUrl}
+							<a
+								href={selectedMedal.stravaUrl}
+								target="_blank"
+								rel="noopener noreferrer"
+								class="mt-4 inline-flex w-fit items-center text-xs font-semibold text-[#FC4C02] underline underline-offset-4 decoration-[#FC4C02]/60 transition hover:decoration-[#FC4C02]"
+							>
+								View on Strava
+							</a>
+						{/if}
+
+						<p class="mt-4 text-sm leading-relaxed text-zinc-400">
+							{selectedMedal.description ??
+								'A short race note can go here — conditions, race strategy, and key moments from the day.'}
 						</p>
 					</div>
 				</div>
