@@ -1,93 +1,127 @@
 import type { Medal } from '$lib/types/medal';
 
 export const medals: Medal[] = [
+	// ===== 2026 =====
+
 	{
-		title: 'The Epic Glow Night Run',
+		title: 'Albay Marathon',
+		tag: 'Collection Item',
+		distanceLabel: 'Full Marathon',
+		eventDate: 'July 12, 2026',
+		location: 'Libon, Albay'
+	},
+	{
+		title: 'Ciudad de Sorsogon Marathon',
+		tag: 'Collection Item',
+		distanceLabel: 'Full Marathon',
+		eventDate: 'June 14, 2026',
+		location: 'Sorsogon City'
+	},
+	{
+		title: 'Legazpi Marathon',
+		tag: 'Collection Item',
+		distanceLabel: 'Full Marathon',
+		eventDate: 'April 26, 2026',
+		location: 'Legazpi, Albay'
+	},
+	{
+		title: 'Summer Fitness Run 2026',
 		tag: 'Collection Item',
 		distanceLabel: '10 Kilometer Run',
-		eventDate: 'October 2025',
-		location: 'Sorsogon City',
-		finishTime: '54:12',
-		pace: '5:25 /km',
-		placement: 'Top 18%',
-		stravaUrl: 'https://www.strava.com',
+		eventDate: 'April 11, 2026',
+		location: 'Legazpi, Albay',
+		finishTime: '47:31',
+		pace: '4:45 /km',
+		placement: 'Top 10%', // improved
+		stravaUrl: 'https://strava.app.link/AE4IosmGl2b',
 		description:
 			'Fast night race with humid weather and great crowd support. Strong final two kilometers.',
-		src: '/medals/glow_run_2025.webp',
-		thumbnailSrc: '/medals/glow_run_2025-thumb.webp',
-		fullSrc: '/medals/glow_run_2025.webp'
+		src: '/medals/summer_fitness_run_2026.webp',
+		thumbnailSrc: '/medals/summer_fitness_run_2026-thumb.webp',
+		fullSrc: '/medals/summer_fitness_run_2026.webp'
 	},
 	{
-		title: 'Legazpi Half Marathon',
+		title: 'Cagsawa Half Marathon',
 		tag: 'Collection Item',
 		distanceLabel: 'Half Marathon',
-		eventDate: 'September 2025',
-		location: 'Legazpi City',
-		finishTime: '2:02:47',
-		pace: '5:49 /km',
-		placement: 'Top 22%',
-		stravaUrl: 'https://www.strava.com',
-		description:
-			'Steady effort from start to finish with rolling sections and a controlled negative split.',
-		src: '/medals/legazpi_half_2025.webp',
-		thumbnailSrc: '/medals/legazpi_half_2025-thumb.webp',
-		fullSrc: '/medals/legazpi_half_2025.webp'
+		eventDate: 'February 22, 2026',
+		location: 'Legazpi, Albay',
+		finishTime: '2:07:28',
+		pace: '5:56 /km',
+		placement: 'Top 32%', // adjusted
+		stravaUrl: 'https://strava.app.link/3MCSITSEl2b',
+		src: '/medals/cagsawa_half_2025.webp',
+		thumbnailSrc: '/medals/cagsawa_half_2025-thumb.webp',
+		fullSrc: '/medals/cagsawa_half_2025.webp'
 	},
 	{
-		title: 'Pinangat Festival 10 miler run',
-		tag: 'Collection Item',
-		distanceLabel: '10-Mile Run',
-		eventDate: 'July 2025',
-		location: 'Camalig, Albay',
-		finishTime: '1:31:09',
-		pace: '5:40 /km',
-		placement: 'Top 20%',
-		stravaUrl: 'https://www.strava.com',
-		description: 'Challenging heat but consistent pace management across the full ten-mile route.',
-		src: '/medals/10_miler_2025.webp',
-		thumbnailSrc: '/medals/10_miler_2025-thumb.webp',
-		fullSrc: '/medals/10_miler_2025.webp'
-	},
-	{
-		title: 'Gubat Half Marathon',
+		title: 'Love Run Half Marathon',
 		tag: 'Collection Item',
 		distanceLabel: 'Half Marathon',
-		src: '/medals/gubat_half_2025.webp',
-		thumbnailSrc: '/medals/gubat_half_2025.webp',
-		fullSrc: '/medals/gubat_half_2025.webp'
+		eventDate: 'February 15, 2026',
+		location: 'Legazpi, Albay',
+		finishTime: '1:53:08',
+		pace: '5:20 /km',
+		placement: 'Top 15%', // improved
+		stravaUrl: 'https://strava.app.link/c5oL2BUEl2b',
+		src: '/medals/love_run_2025.webp',
+		thumbnailSrc: '/medals/love_run_2025.webp',
+		fullSrc: '/medals/love_run_2025.webp'
 	},
 	{
-		title: 'Milo Half Marathon',
+		title: 'Trenta',
+		tag: 'Collection Item',
+		distanceLabel: '30 Kilometer Run',
+		eventDate: 'January 25, 2026',
+		location: 'Sto. Domingo, Albay',
+		finishTime: '2:46:00',
+		pace: '7:07 /km',
+		placement: 'Top 25%', // adjusted
+		stravaUrl: 'https://strava.app.link/bd4VadjFl2b',
+		src: '/medals/trenta_2026.webp',
+		thumbnailSrc: '/medals/trenta_2026-thumb.webp',
+		fullSrc: '/medals/trenta_2026.webp'
+	},
+
+	// ===== 2025 =====
+	{
+		title: 'Charity Run 2025',
+		tag: 'Collection Item',
+		distanceLabel: '25 Kilometer Run',
+		eventDate: 'December 14, 2025',
+		location: 'Legazpi, Albay',
+		finishTime: '2:46:00',
+		pace: '6:33 /km',
+		placement: 'Top 28%', // adjusted
+		stravaUrl: 'https://strava.app.link/RbfdJKgFl2b',
+		src: '/medals/charity_run_2025.webp',
+		thumbnailSrc: '/medals/charity_run_2025-thumb.webp',
+		fullSrc: '/medals/charity_run_2025.webp'
+	},
+	{
+		title: 'Albay Half Marathon',
 		tag: 'Collection Item',
 		distanceLabel: 'Half Marathon',
-		eventDate: 'August 2025',
-		location: 'Naga City',
-		finishTime: '2:08:15',
-		pace: '6:04 /km',
-		placement: 'Top 30%',
-		stravaUrl: 'https://www.strava.com',
-		description: 'Strong finish after a conservative first half and better rhythm in the closing stretch.',
-		src: '/medals/milo_half_2025.webp',
-		thumbnailSrc: '/medals/milo_half_2025-thumb.webp',
-		fullSrc: '/medals/milo_half_2025.webp'
+		eventDate: 'November 23, 2025',
+		location: 'Legazpi, Albay',
+		finishTime: '2:07:33',
+		pace: '5:57 /km',
+		placement: 'Top 33%', // slight adjust
+		stravaUrl: 'https://strava.app.link/FdtDLFeFl2b',
+		description: 'Hilly sections made this one tough, but effort stayed controlled and steady.',
+		src: '/medals/albay_half_2025.webp',
+		thumbnailSrc: '/medals/albay_half_2025-thumb.webp',
+		fullSrc: '/medals/albay_half_2025.webp'
 	},
 	{
-		title: 'Sorsogon Halloween night Run',
-		tag: 'Collection Item',
-		distanceLabel: '10 Kilometer Run',
-		src: '/medals/haloween_run_2025.webp',
-		thumbnailSrc: '/medals/haloween_run_2025-thumb.webp',
-		fullSrc: '/medals/haloween_run_2025.webp'
-	},
-	{
-		title: 'Sorsogon Half Marathon',
+		title: 'Sorsogon City Half Marathon',
 		tag: 'Collection Item',
 		distanceLabel: 'Half Marathon',
-		eventDate: 'November 2025',
+		eventDate: 'November 16, 2025',
 		location: 'Sorsogon City',
 		finishTime: '2:05:30',
 		pace: '5:57 /km',
-		placement: 'Top 25%',
+		placement: 'Top 28%', // adjusted
 		stravaUrl: 'https://www.strava.com',
 		description: 'Well-paced race with good hydration strategy and stable cadence throughout.',
 		src: '/medals/sorsogon_half_2025.webp',
@@ -95,63 +129,94 @@ export const medals: Medal[] = [
 		fullSrc: '/medals/sorsogon_half_2025.webp'
 	},
 	{
-		title: 'Albay Half Marathon',
+		title: 'Sorsogon Halloween Night Run',
+		tag: 'Collection Item',
+		distanceLabel: '10 Kilometer Run',
+		eventDate: 'November 1, 2025',
+		location: 'Sorsogon City',
+		finishTime: '51:49',
+		pace: '5:19 /km',
+		placement: 'Top 22%', // improved
+		stravaUrl: 'https://strava.app.link/vWdrdfaJl2b',
+		src: '/medals/haloween_run_2025.webp',
+		thumbnailSrc: '/medals/haloween_run_2025-thumb.webp',
+		fullSrc: '/medals/haloween_run_2025.webp'
+	},
+	{
+		title: 'Milo Half Marathon',
 		tag: 'Collection Item',
 		distanceLabel: 'Half Marathon',
-		eventDate: 'June 2025',
-		location: 'Legazpi City',
-		finishTime: '2:11:04',
-		pace: '6:12 /km',
-		placement: 'Top 34%',
-		stravaUrl: 'https://www.strava.com',
-		description: 'Hilly sections made this one tough, but effort stayed controlled and steady.',
-		src: '/medals/albay_half_2025.webp',
-		thumbnailSrc: '/medals/albay_half_2025-thumb.webp',
-		fullSrc: '/medals/albay_half_2025.webp'
+		eventDate: 'October 18, 2025',
+		location: 'Sorsogon City',
+		finishTime: '1:53:38',
+		pace: '5:23 /km',
+		placement: 'Top 18%', // improved
+		stravaUrl: 'https://strava.app.link/RR9vmV9El2b',
+		description:
+			'Strong finish after a conservative first half and better rhythm in the closing stretch.',
+		src: '/medals/milo_half_2025.webp',
+		thumbnailSrc: '/medals/milo_half_2025-thumb.webp',
+		fullSrc: '/medals/milo_half_2025.webp'
 	},
 	{
-		title: 'Charity Run 2025',
+		title: 'The Epic Glow Night Run',
 		tag: 'Collection Item',
-		distanceLabel: '25 Kilometer Run',
-		src: '/medals/charity_run_2025.webp',
-		thumbnailSrc: '/medals/charity_run_2025-thumb.webp',
-		fullSrc: '/medals/charity_run_2025.webp'
+		distanceLabel: '10 Kilometer Run',
+		eventDate: 'October 4, 2025',
+		location: 'Legazpi, Albay',
+		finishTime: '53:36',
+		pace: '5:21 /km',
+		placement: 'Top 26%', // adjusted
+		stravaUrl: 'https://strava.app.link/CGDZPWMEl2b',
+		description:
+			'Fast night race with humid weather and great crowd support. Strong final two kilometers.',
+		src: '/medals/glow_run_2025.webp',
+		thumbnailSrc: '/medals/glow_run_2025-thumb.webp',
+		fullSrc: '/medals/glow_run_2025.webp'
 	},
 	{
-		title: 'Trenta',
-		tag: 'Collection Item',
-		distanceLabel: '30 Kilometer Run',
-		src: '/medals/trenta_2026.webp',
-		thumbnailSrc: '/medals/trenta_2026-thumb.webp',
-		fullSrc: '/medals/trenta_2026.webp'
-	},
-	{
-		title: 'Love Run Half Marathon',
-		tag: 'Collection Item',
-		distanceLabel: 'Half Marathon',
-		src: '/medals/love_run_2025.webp',
-		thumbnailSrc: '/medals/love_run_2025.webp',
-		fullSrc: '/medals/love_run_2025.webp'
-	},
-	{
-		title: 'Cagsawa Half Marathon',
+		title: 'Gubat Half Marathon',
 		tag: 'Collection Item',
 		distanceLabel: 'Half Marathon',
-		src: '/medals/cagsawa_half_2025.webp',
-		thumbnailSrc: '/medals/cagsawa_half_2025-thumb.webp',
-		fullSrc: '/medals/cagsawa_half_2025.webp'
+		eventDate: 'August 31, 2025',
+		location: 'Gubat, Sorsogon',
+		finishTime: '2:06:14',
+		pace: '5:57 /km',
+		placement: 'Top 34%', // slight adjust
+		stravaUrl: 'https://strava.app.link/8XrPpZ7El2b',
+		src: '/medals/gubat_half_2025.webp',
+		thumbnailSrc: '/medals/gubat_half_2025.webp',
+		fullSrc: '/medals/gubat_half_2025.webp'
 	},
 	{
-		title: 'Strides and Shine 2025',
+		title: 'Pinangat Festival 10 Miler Run',
 		tag: 'Collection Item',
-		distanceLabel: '16 Kilometer Run'
-		// src: '/medals/strides_shine_2025.webp',
-		// thumbnailSrc: '/medals/strides_shine_2025-thumb.webp',
-		// fullSrc: '/medals/strides_shine_2025.webp'
+		distanceLabel: '10-Mile Run',
+		eventDate: 'July 20, 2025',
+		location: 'Camalig, Albay',
+		finishTime: '1:34:15',
+		pace: '5:53 /km',
+		placement: 'Top 33%', // adjusted
+		stravaUrl: 'https://strava.app.link/tm8cw65El2b',
+		description: 'Challenging heat but consistent pace management across the full ten-mile route.',
+		src: '/medals/10_miler_2025.webp',
+		thumbnailSrc: '/medals/10_miler_2025-thumb.webp',
+		fullSrc: '/medals/10_miler_2025.webp'
 	},
 	{
-		title: 'Ciudad de Sorsogon Marathon',
+		title: 'First Legazpi Marathon',
 		tag: 'Collection Item',
-		distanceLabel: 'Full Marathon'
+		distanceLabel: 'Half Marathon',
+		eventDate: 'June 1, 2025',
+		location: 'Legazpi, Albay',
+		finishTime: '2:24:01',
+		pace: '6:30 /km',
+		placement: 'Top 45%', // adjusted
+		stravaUrl: 'https://strava.app.link/eMd9Nj3El2b',
+		description:
+			'Steady effort from start to finish with rolling sections and a controlled negative split.',
+		src: '/medals/legazpi_half_2025.webp',
+		thumbnailSrc: '/medals/legazpi_half_2025-thumb.webp',
+		fullSrc: '/medals/legazpi_half_2025.webp'
 	}
 ];
