@@ -3,27 +3,27 @@ import type { Medal } from '$lib/types/medal';
 export const medals: Medal[] = [
 	// ===== 2026 =====
 
-	{
-		title: 'Albay Marathon',
-		tag: 'Collection Item',
-		distanceLabel: 'Full Marathon',
-		eventDate: 'July 12, 2026',
-		location: 'Libon, Albay'
-	},
-	{
-		title: 'Ciudad de Sorsogon Marathon',
-		tag: 'Collection Item',
-		distanceLabel: 'Full Marathon',
-		eventDate: 'June 14, 2026',
-		location: 'Sorsogon City'
-	},
-	{
-		title: 'Legazpi Marathon',
-		tag: 'Collection Item',
-		distanceLabel: 'Full Marathon',
-		eventDate: 'April 26, 2026',
-		location: 'Legazpi, Albay'
-	},
+	// {
+	// 	title: 'Albay Marathon',
+	// 	tag: 'Collection Item',
+	// 	distanceLabel: 'Full Marathon',
+	// 	eventDate: 'July 12, 2026',
+	// 	location: 'Libon, Albay'
+	// },
+	// {
+	// 	title: 'Ciudad de Sorsogon Marathon',
+	// 	tag: 'Collection Item',
+	// 	distanceLabel: 'Full Marathon',
+	// 	eventDate: 'June 14, 2026',
+	// 	location: 'Sorsogon City'
+	// },
+	// {
+	// 	title: 'Legazpi Marathon',
+	// 	tag: 'Collection Item',
+	// 	distanceLabel: 'Full Marathon',
+	// 	eventDate: 'April 26, 2026',
+	// 	location: 'Legazpi, Albay'
+	// },
 	{
 		title: 'Summer Fitness Run 2026',
 		tag: 'Collection Item',
@@ -106,7 +106,7 @@ export const medals: Medal[] = [
 		location: 'Legazpi, Albay',
 		finishTime: '2:07:33',
 		pace: '5:57 /km',
-		placement: 'Top 33%', // slight adjust
+		placement: 'Top 33%',
 		stravaUrl: 'https://strava.app.link/FdtDLFeFl2b',
 		description: 'Hilly sections made this one tough, but effort stayed controlled and steady.',
 		src: '/medals/albay_half_2025.webp',
@@ -141,6 +141,22 @@ export const medals: Medal[] = [
 		src: '/medals/haloween_run_2025.webp',
 		thumbnailSrc: '/medals/haloween_run_2025-thumb.webp',
 		fullSrc: '/medals/haloween_run_2025.webp'
+	},
+	{
+		title: 'Strides and Shine',
+		tag: 'Collection Item',
+		distanceLabel: '16 Kilometer Run',
+		eventDate: 'October 18, 2025',
+		location: 'Legazpi, Albay',
+		finishTime: '2:03:40',
+		pace: '7:44 /km',
+		placement: 'Top 18%', // improved
+		stravaUrl: 'https://strava.app.link/WE3WFtELl2b',
+		description:
+			'Strong finish after a conservative first half and better rhythm in the closing stretch.',
+		src: '/medals/strides_shine_2025.webp',
+		thumbnailSrc: '/medals/strides_shine_2025-thumb.webp',
+		fullSrc: '/medals/strides_shine_2025.webp'
 	},
 	{
 		title: 'Milo Half Marathon',
@@ -182,11 +198,25 @@ export const medals: Medal[] = [
 		location: 'Gubat, Sorsogon',
 		finishTime: '2:06:14',
 		pace: '5:57 /km',
-		placement: 'Top 34%', // slight adjust
+		placement: 'Top 34%',
 		stravaUrl: 'https://strava.app.link/8XrPpZ7El2b',
 		src: '/medals/gubat_half_2025.webp',
 		thumbnailSrc: '/medals/gubat_half_2025.webp',
 		fullSrc: '/medals/gubat_half_2025.webp'
+	},
+	{
+		title: 'Guinobatan Longganisa Festival Fun Run 2025',
+		tag: 'Collection Item',
+		distanceLabel: '10 Kilometer Run',
+		eventDate: 'August 10, 2025',
+		location: 'Guinobatan, Albay',
+		finishTime: '54:50',
+		pace: '5:15 /km',
+		placement: 'Top 20%',
+		stravaUrl: 'https://strava.app.link/SEM36i6Kl2b',
+		src: '/medals/guinobatan_run_2025.webp',
+		thumbnailSrc: '/medals/guinobatan_run_2025-thumb.webp',
+		fullSrc: '/medals/guinobatan_run_2025.webp'
 	},
 	{
 		title: 'Pinangat Festival 10 Miler Run',
