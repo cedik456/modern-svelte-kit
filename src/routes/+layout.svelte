@@ -1,5 +1,7 @@
 <script lang="ts">
+	import { resolve } from '$app/paths';
 	import favicon from '$lib/assets/favicon.svg';
+	import { archiveSearch } from '$lib/stores/archive';
 	import '../app.css';
 
 	let { children } = $props();
@@ -13,12 +15,12 @@
 <div class="min-h-screen bg-zinc-950 text-zinc-100">
 	<header class="sticky top-0 z-50 border-b border-white/5 bg-zinc-950">
 		<div class="mx-auto flex max-w-6xl items-center gap-4 px-4 py-3 sm:px-6 lg:px-8">
-			<a href="/" class="text-sm font-semibold tracking-wide">Medal Archives</a>
+			<a href={resolve('/')} class="text-sm font-semibold tracking-wide">Medal Archives</a>
 
 			<nav class="hidden items-center gap-6 text-xs text-zinc-300 md:flex">
-				<a href="/" class="hover:text-white">All Medals</a>
-				<a href="/" class="hover:text-white">Collections</a>
-				<a href="/" class="hover:text-white">Curators</a>
+				<a href={resolve('/')} class="hover:text-white">All Medals</a>
+				<a href={resolve('/')} class="hover:text-white">Collections</a>
+				<a href={resolve('/')} class="hover:text-white">Curators</a>
 			</nav>
 
 			<div class="ml-auto flex flex-1 items-center justify-end gap-3">
@@ -40,6 +42,7 @@
 						/>
 					</svg>
 					<input
+						bind:value={$archiveSearch}
 						class="w-full bg-transparent text-xs text-zinc-200 placeholder:text-zinc-500 focus:outline-none"
 						placeholder="Search the archive..."
 						type="search"
@@ -51,7 +54,9 @@
 		</div>
 
 		<div class="px-4 pb-3 sm:hidden">
-			<div class="flex items-center gap-2 rounded-full border border-white/10 bg-zinc-900 px-3 py-2">
+			<div
+				class="flex items-center gap-2 rounded-full border border-white/10 bg-zinc-900 px-3 py-2"
+			>
 				<svg
 					aria-hidden="true"
 					viewBox="0 0 24 24"
@@ -67,6 +72,7 @@
 					/>
 				</svg>
 				<input
+					bind:value={$archiveSearch}
 					class="w-full bg-transparent text-xs text-zinc-200 placeholder:text-zinc-500 focus:outline-none"
 					placeholder="Search the archive..."
 					type="search"
@@ -74,9 +80,9 @@
 			</div>
 
 			<nav class="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-xs text-zinc-300">
-				<a href="/" class="hover:text-white">All Medals</a>
-				<a href="/" class="hover:text-white">Collections</a>
-				<a href="/" class="hover:text-white">Curators</a>
+				<a href={resolve('/')} class="hover:text-white">All Medals</a>
+				<a href={resolve('/')} class="hover:text-white">Collections</a>
+				<a href={resolve('/')} class="hover:text-white">Curators</a>
 			</nav>
 		</div>
 	</header>

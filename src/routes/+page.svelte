@@ -1,10 +1,12 @@
 <script lang="ts">
 	import { medals } from '$lib/data/medals';
+	import { archiveSearch } from '$lib/stores/archive';
 	import type { Medal } from '$lib/types/medal';
 	import { fade, scale } from 'svelte/transition';
 
 	const filters = ['All Medals', 'Marathons', 'Triathlons', 'Ironmans', 'Others'] as const;
 	let active = $state<(typeof filters)[number]>('All Medals');
+	let selectedMedal = $state<Medal | null>(null);
 
 	function getCardSrc(medal: Medal) {
 		return medal.thumbnailSrc ?? medal.src ?? medal.fullSrc;
@@ -20,7 +22,19 @@
 		return `${medal.thumbnailSrc} 720w, ${largeSrc} 1200w`;
 	}
 
-	let selectedMedal = $state<Medal | null>(null);
+	function matchesSearch(medal: Medal, query: string) {
+		const q = query.trim().toLowerCase();
+		if (!q) return true;
+
+		const haystack = [medal.title, medal.distanceLabel, medal.eventDate, medal.finishTime]
+			.filter(Boolean)
+			.join(' ')
+			.toLowerCase();
+
+		return haystack.includes(q);
+	}
+
+	let filteredMedals = $derived(medals.filter((medal) => matchesSearch(medal, $archiveSearch)));
 </script>
 
 <svelte:window onkeydown={(event) => event.key === 'Escape' && (selectedMedal = null)} />
@@ -43,16 +57,16 @@
 				class="-mx-4 overflow-x-auto overflow-y-hidden px-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:px-0"
 			>
 				<div class="flex w-max items-center gap-2 sm:w-auto sm:flex-wrap">
-					{#each filters as f}
+					{#each filters as filter (filter)}
 						<button
 							type="button"
-							onclick={() => (active = f)}
+							onclick={() => (active = filter)}
 							class={'inline-flex items-center rounded-full px-3 py-1.5 text-xs font-medium ring-1 ring-inset transition ' +
-								(active === f
+								(active === filter
 									? 'bg-zinc-200 text-zinc-900 ring-white/20'
 									: 'bg-zinc-900 text-zinc-200 ring-white/10 hover:bg-zinc-800')}
 						>
-							{f}
+							{filter}
 						</button>
 					{/each}
 				</div>
@@ -60,7 +74,7 @@
 		</div>
 
 		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-			{#each medals as medal}
+			{#each filteredMedals as medal (medal.title)}
 				<button
 					type="button"
 					class="group cursor-pointer text-left"
@@ -102,7 +116,7 @@
 <a
 	href="https://www.strava.com"
 	target="_blank"
-	rel="noopener noreferrer"
+	rel="noopener noreferrer external"
 	class="fixed bottom-5 right-8 z-60 inline-flex items-center rounded-full border border-[#FC4C02]/50 bg-[#FC4C02]/15 px-4 py-2 text-xs font-semibold text-[#FC4C02] shadow-lg shadow-black/30 backdrop-blur-sm transition hover:bg-[#FC4C02]/25 sm:bottom-6 sm:right-6"
 >
 	Follow me on Strava
@@ -124,7 +138,7 @@
 				role="dialog"
 				aria-modal="true"
 				aria-label={selectedMedal.title}
-				class="w-full overflow-hidden rounded-2xl border border-white/10 bg-zinc-950/85 shadow-2xl shadow-black/50 ring-1 ring-white/5 md:h-[22rem]"
+				class="w-full overflow-hidden rounded-2xl border border-white/10 bg-zinc-950/85 shadow-2xl shadow-black/50 ring-1 ring-white/5 md:h-88"
 				transition:scale={{ duration: 140, start: 0.98 }}
 			>
 				<div class="grid h-full gap-0 md:grid-cols-[1.05fr_1fr]">
@@ -146,7 +160,7 @@
 							</div>
 						{/if}
 						<div
-							class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"
+							class="pointer-events-none absolute inset-0 bg-linear-to-t from-black/20 to-transparent"
 						></div>
 					</div>
 
@@ -198,7 +212,7 @@
 							<a
 								href={selectedMedal.stravaUrl}
 								target="_blank"
-								rel="noopener noreferrer"
+								rel="noopener noreferrer external"
 								class="mt-4 inline-flex w-fit items-center text-xs font-semibold text-[#FC4C02] underline underline-offset-4 decoration-[#FC4C02]/60 transition hover:decoration-[#FC4C02]"
 							>
 								View on Strava
