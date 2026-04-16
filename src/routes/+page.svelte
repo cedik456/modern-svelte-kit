@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { medals } from '$lib/data/medals';
+	import { upcomingRaces } from '$lib/data/races';
 	import { archiveSearch } from '$lib/stores/archive';
 	import type { Medal } from '$lib/types/medal';
 	import { fade, scale } from 'svelte/transition';
@@ -40,7 +41,37 @@
 		return haystack.includes(q);
 	}
 
-	let filteredMedals = $derived(medals.filter((medal) => matchesSearch(medal, $archiveSearch)));
+	function matchesFilter(medal: Medal, filter: (typeof filters)[number]) {
+		const distance = medal.distanceLabel?.toLowerCase() ?? '';
+
+		if (filter === 'All Entries') return true;
+
+		if (filter === 'Full Marathon') {
+			return distance.includes('full marathon');
+		}
+
+		if (filter === 'Half Marathon') {
+			return distance.includes('half marathon');
+		}
+
+		if (filter === 'Other Distances') {
+			return distance && !distance.includes('half marathon') && !distance.includes('full marathon');
+		}
+
+		return false;
+	}
+
+	let searchQuery = $derived($archiveSearch.trim().toLowerCase());
+
+	let filteredMedals = $derived(
+		medals.filter((medal) => matchesSearch(medal, searchQuery) && matchesFilter(medal, active))
+	);
+
+	let filteredUpcomingRaces = $derived(
+		upcomingRaces.filter((race) => matchesSearch(race, searchQuery))
+	);
+
+	let visibleEntries = $derived(active === 'Upcoming' ? filteredUpcomingRaces : filteredMedals);
 </script>
 
 <svelte:window onkeydown={(event) => event.key === 'Escape' && (selectedMedal = null)} />
@@ -82,7 +113,7 @@
 		</div>
 
 		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-			{#each filteredMedals as medal (medal.title)}
+			{#each visibleEntries as medal (medal.title)}
 				<button
 					type="button"
 					class="group cursor-pointer text-left"
