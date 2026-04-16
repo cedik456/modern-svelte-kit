@@ -18,9 +18,8 @@
 			<a href={resolve('/')} class="text-sm font-semibold tracking-wide">Medal Archives</a>
 
 			<nav class="hidden items-center gap-6 text-xs text-zinc-300 md:flex">
-				<a href={resolve('/')} class="hover:text-white">All Medals</a>
-				<a href={resolve('/')} class="hover:text-white">Collections</a>
-				<a href={resolve('/')} class="hover:text-white">Curators</a>
+				<a href={resolve('/')} class="hover:text-white">Archive</a>
+				<a href={resolve('/')} class="hover:text-white">About</a>
 			</nav>
 
 			<div class="ml-auto flex flex-1 items-center justify-end gap-3">
@@ -88,9 +87,8 @@
 			</div>
 
 			<nav class="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-xs text-zinc-300">
-				<a href={resolve('/')} class="hover:text-white">All Medals</a>
-				<a href={resolve('/')} class="hover:text-white">Collections</a>
-				<a href={resolve('/')} class="hover:text-white">Curators</a>
+				<a href={resolve('/')} class="hover:text-white">Archive</a>
+				<a href={resolve('/')} class="hover:text-white">About</a>
 			</nav>
 		</div>
 	</header>
