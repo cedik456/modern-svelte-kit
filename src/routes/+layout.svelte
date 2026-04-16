@@ -49,7 +49,15 @@
 					/>
 				</div>
 
-				<div class="h-8 w-8 rounded-full bg-zinc-900 ring-1 ring-white/10" aria-hidden="true"></div>
+				<div
+					class="relative flex h-9 w-9 items-center justify-center overflow-hidden rounded-full border border-blue-400/20 bg-zinc-900 text-xs font-semibold text-zinc-100 ring-1 ring-white/10"
+					aria-label="Profile placeholder"
+				>
+					<div
+						class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(96,165,250,0.32),transparent_58%),linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0))]"
+					></div>
+					<span class="relative text-sm tracking-[0.08em]">C</span>
+				</div>
 			</div>
 		</div>
 
