@@ -4,8 +4,14 @@
 	import type { Medal } from '$lib/types/medal';
 	import { fade, scale } from 'svelte/transition';
 
-	const filters = ['All Medals', 'Marathons', 'Triathlons', 'Ironmans', 'Others'] as const;
-	let active = $state<(typeof filters)[number]>('All Medals');
+	const filters = [
+		'All Entries',
+		'Full Marathon',
+		'Half Marathon',
+		'Upcoming',
+		'Other Distances'
+	] as const;
+	let active = $state<(typeof filters)[number]>('All Entries');
 	let selectedMedal = $state<Medal | null>(null);
 
 	function getCardSrc(medal: Medal) {
@@ -64,7 +70,9 @@
 							class={'inline-flex items-center rounded-full px-3 py-1.5 text-xs font-medium ring-1 ring-inset transition ' +
 								(active === filter
 									? 'bg-zinc-200 text-zinc-900 ring-white/20'
-									: 'bg-zinc-900 text-zinc-200 ring-white/10 hover:bg-zinc-800')}
+									: filter === 'Upcoming'
+										? 'bg-blue-400/5 text-blue-200 ring-blue-400/25 hover:bg-blue-400/10'
+										: 'bg-zinc-900 text-zinc-200 ring-white/10 hover:bg-zinc-800')}
 						>
 							{filter}
 						</button>
