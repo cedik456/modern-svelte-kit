@@ -203,7 +203,9 @@
 						></div>
 					</div>
 
-					<div class="flex flex-col border-t border-white/10 p-6 sm:p-8 md:border-t-0 md:border-l">
+					<div
+						class="min-h-0 overflow-y-auto border-t border-white/10 p-6 sm:p-8 md:border-t-0 md:border-l"
+					>
 						<div class="flex items-start gap-4">
 							<div>
 								<h2 class="text-2xl font-semibold tracking-tight text-zinc-100">
@@ -222,7 +224,7 @@
 							</button>
 						</div>
 
-						<div class="mt-5 space-y-2 text-sm text-zinc-300">
+						<div class="space-y-2 text-sm text-zinc-300">
 							<p>
 								<span class="text-zinc-500">Date:</span>
 								{selectedMedal.eventDate ?? 'To be added'}
