@@ -30,12 +30,12 @@ export const medals: Medal[] = [
 		distanceLabel: 'Full Marathon',
 		eventDate: 'April 26, 2026',
 		location: 'Legazpi, Albay',
-		finishTime: '47:31',
+		finishTime: '3:52:30',
 		pace: '5:40 /km',
 		placement: 'Top 18 Overall', // improved
-		stravaUrl: 'https://strava.app.link/AE4IosmGl2b',
+		stravaUrl: 'https://strava.app.link/g4SPjCCM2b',
 		description:
-			'Fast night race with humid weather and great crowd support. Strong final two kilometers.',
+			'It was a one hell of an experience. I was able to run my first marathon, finish sub-4, and even land 3rd place on my age group.',
 		src: '/medals/legazpi_marathon_2026.webp',
 		thumbnailSrc: '/medals/legazpi_marathon_2026-thumb.webp',
 		fullSrc: '/medals/legazpi_marathon_2026.webp'
@@ -51,7 +51,7 @@ export const medals: Medal[] = [
 		placement: 'Top 10%', // improved
 		stravaUrl: 'https://strava.app.link/AE4IosmGl2b',
 		description:
-			'Fast night race with humid weather and great crowd support. Strong final two kilometers.',
+			'This is the fastest 10K I have ever run, and it was a great way to kick off the 2026 season.',
 		src: '/medals/summer_fitness_run_2026.webp',
 		thumbnailSrc: '/medals/summer_fitness_run_2026-thumb.webp',
 		fullSrc: '/medals/summer_fitness_run_2026.webp'
@@ -66,6 +66,8 @@ export const medals: Medal[] = [
 		pace: '5:56 /km',
 		placement: 'Top 32%', // adjusted
 		stravaUrl: 'https://strava.app.link/3MCSITSEl2b',
+		description:
+			'My second run on 2026, It was a great one, I was able to finish strong and enjoy the scenic route around the Cagsawa Ruins.',
 		src: '/medals/cagsawa_half_2025.webp',
 		thumbnailSrc: '/medals/cagsawa_half_2025-thumb.webp',
 		fullSrc: '/medals/cagsawa_half_2025.webp'
@@ -80,6 +82,8 @@ export const medals: Medal[] = [
 		pace: '5:20 /km',
 		placement: 'Top 15%', // improved
 		stravaUrl: 'https://strava.app.link/c5oL2BUEl2b',
+		description:
+			'This race was my pr attempt on the sub 1:50 mark, I failed but at least I was able to enjoy the race.',
 		src: '/medals/love_run_2025.webp',
 		thumbnailSrc: '/medals/love_run_2025.webp',
 		fullSrc: '/medals/love_run_2025.webp'
@@ -94,6 +98,9 @@ export const medals: Medal[] = [
 		pace: '7:07 /km',
 		placement: 'Top 25%', // adjusted
 		stravaUrl: 'https://strava.app.link/bd4VadjFl2b',
+		description:
+			'This was one of the hardest races I have ever ran, Its my first time completing a 30K, the hills were brutal but thanks to God’s grace I was able to finish.',
+
 		src: '/medals/trenta_2026.webp',
 		thumbnailSrc: '/medals/trenta_2026-thumb.webp',
 		fullSrc: '/medals/trenta_2026.webp'
@@ -110,6 +117,8 @@ export const medals: Medal[] = [
 		pace: '6:33 /km',
 		placement: 'Top 28%', // adjusted
 		stravaUrl: 'https://strava.app.link/RbfdJKgFl2b',
+		description:
+			'My first 25k, me and my friend ran together and we were able to finish strong, it was a great way to end the year.',
 		src: '/medals/charity_run_2025.webp',
 		thumbnailSrc: '/medals/charity_run_2025-thumb.webp',
 		fullSrc: '/medals/charity_run_2025.webp'
@@ -124,7 +133,8 @@ export const medals: Medal[] = [
 		pace: '5:57 /km',
 		placement: 'Top 33%',
 		stravaUrl: 'https://strava.app.link/FdtDLFeFl2b',
-		description: 'Hilly sections made this one tough, but effort stayed controlled and steady.',
+		description:
+			'Albay Half Marathon, this was an enjoyable race. It had great aid stations and theres so many crowd support along the route.',
 		src: '/medals/albay_half_2025.webp',
 		thumbnailSrc: '/medals/albay_half_2025-thumb.webp',
 		fullSrc: '/medals/albay_half_2025.webp'
@@ -139,7 +149,8 @@ export const medals: Medal[] = [
 		pace: '5:57 /km',
 		placement: 'Top 28%', // adjusted
 		stravaUrl: 'https://www.strava.com',
-		description: 'Well-paced race with good hydration strategy and stable cadence throughout.',
+		description:
+			'This was a crazy race, We started late because of parking situation but we were all still able to finish.',
 		src: '/medals/sorsogon_half_2025.webp',
 		thumbnailSrc: '/medals/sorsogon_half_2025-thumb.webp',
 		fullSrc: '/medals/sorsogon_half_2025.webp'
@@ -154,6 +165,8 @@ export const medals: Medal[] = [
 		pace: '5:19 /km',
 		placement: 'Top 22%', // improved
 		stravaUrl: 'https://strava.app.link/vWdrdfaJl2b',
+		description:
+			'This was my fastest half marathon, I was cruising the whole time, i just felt a little bit of fatigue on the last 2 kilometers but I was able to push through.',
 		src: '/medals/haloween_run_2025.webp',
 		thumbnailSrc: '/medals/haloween_run_2025-thumb.webp',
 		fullSrc: '/medals/haloween_run_2025.webp'
