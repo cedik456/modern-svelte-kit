@@ -25,6 +25,22 @@ export const medals: Medal[] = [
 	// 	location: 'Legazpi, Albay'
 	// },
 	{
+		title: 'Legazpi Marathon 2026',
+		tag: 'Collection Item',
+		distanceLabel: 'Full Marathon',
+		eventDate: 'April 26, 2026',
+		location: 'Legazpi, Albay',
+		finishTime: '47:31',
+		pace: '5:40 /km',
+		placement: 'Top 18 Overall', // improved
+		stravaUrl: 'https://strava.app.link/AE4IosmGl2b',
+		description:
+			'Fast night race with humid weather and great crowd support. Strong final two kilometers.',
+		src: '/medals/legazpi_marathon_2026.webp',
+		thumbnailSrc: '/medals/legazpi_marathon_2026-thumb.webp',
+		fullSrc: '/medals/legazpi_marathon_2026.webp'
+	},
+	{
 		title: 'Summer Fitness Run 2026',
 		tag: 'Collection Item',
 		distanceLabel: '10 Kilometer Run',
