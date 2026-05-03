@@ -10,7 +10,12 @@
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
-	const archiveFilters = ['All Entries', DISTANCES.FULL_MARATHON, DISTANCES.HALF_MARATHON, 'Other Distances'] as const;
+	const archiveFilters = [
+		'All Entries',
+		DISTANCES.FULL_MARATHON,
+		DISTANCES.HALF_MARATHON,
+		'Other Distances'
+	] as const;
 	const marketingFilters = [...archiveFilters, 'Upcoming'] as const;
 	type ArchiveFilter = (typeof archiveFilters)[number];
 	type MarketingFilter = (typeof marketingFilters)[number];
@@ -20,6 +25,8 @@
 	let selectedModalImageIndex = $state(0);
 	let showAddAchievement = $state(false);
 	let imageValidationMessage = $state('');
+	let isSavingAchievement = $state(false);
+	let isDeletingAchievement = $state(false);
 
 	$effect(() => {
 		if (form?.message) showAddAchievement = true;
@@ -81,6 +88,12 @@
 		}
 	}
 
+	function confirmDeleteAchievement(event: SubmitEvent) {
+		if (!window.confirm('Delete this achievement? This will remove the entry and its photos.')) {
+			event.preventDefault();
+		}
+	}
+
 	function getCardSrcSet(medal: Medal) {
 		const largeSrc = medal.fullSrc ?? medal.src;
 		if (!medal.thumbnailSrc || !largeSrc || medal.thumbnailSrc === largeSrc) return undefined;
@@ -135,7 +148,9 @@
 		upcomingRaces.filter((race) => matchesSearch(race, searchQuery))
 	);
 
-	let visibleEntries = $derived(active === 'Upcoming' && !isSignedIn ? filteredUpcomingRaces : filteredMedals);
+	let visibleEntries = $derived(
+		active === 'Upcoming' && !isSignedIn ? filteredUpcomingRaces : filteredMedals
+	);
 
 	$effect(() => {
 		if (isSignedIn && active === 'Upcoming') {
@@ -331,8 +346,11 @@
 					enctype="multipart/form-data"
 					onsubmit={handleAchievementSubmit}
 					use:enhance={() => {
+						isSavingAchievement = true;
+
 						return async ({ result, update }) => {
 							await update();
+							isSavingAchievement = false;
 							if (result.type === 'success') {
 								showAddAchievement = false;
 							}
@@ -352,15 +370,31 @@
 
 					<label class="block text-sm">
 						<span class="mb-1 block text-zinc-300">Distance</span>
-						<select
-							name="distanceLabel"
-							class="w-full rounded-md border border-white/10 bg-zinc-900 px-3 py-2.5 text-zinc-100 outline-none ring-blue-400/30 transition focus:border-blue-300/50 focus:ring-4"
-						>
-							<option value="">Select a distance</option>
-							{#each DISTANCE_OPTIONS as distance}
-								<option value={distance}>{distance}</option>
-							{/each}
-						</select>
+						<div class="relative">
+							<select
+								name="distanceLabel"
+								class="w-full appearance-none rounded-md border border-white/10 bg-zinc-900 px-3 py-2.5 pr-10 text-zinc-100 outline-none ring-blue-400/30 transition focus:border-blue-300/50 focus:ring-4"
+							>
+								<option value="">Select a distance</option>
+								{#each DISTANCE_OPTIONS as distance (distance)}
+									<option value={distance}>{distance}</option>
+								{/each}
+							</select>
+							<svg
+								class="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-100"
+								viewBox="0 0 20 20"
+								fill="none"
+								aria-hidden="true"
+							>
+								<path
+									d="M5 7.5L10 12.5L15 7.5"
+									stroke="currentColor"
+									stroke-width="1.75"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+								/>
+							</svg>
+						</div>
 					</label>
 
 					<label class="block text-sm">
@@ -429,8 +463,8 @@
 							onchange={(event) => validateSelectedImages(event.currentTarget.files)}
 						/>
 						<p class="mt-2 text-xs leading-relaxed text-zinc-500">
-							Upload up to 6 photos, 2MB each and 4MB total. Each photo is converted to WebP,
-							saved as a full image and thumbnail, and optimized for the archive grid.
+							Upload up to 6 photos, 2MB each and 4MB total. Each photo is converted to WebP, saved
+							as a full image and thumbnail, and optimized for the archive grid.
 						</p>
 						{#if imageValidationMessage}
 							<p class="mt-2 text-xs text-red-300">{imageValidationMessage}</p>
@@ -450,14 +484,24 @@
 					<div class="flex flex-col gap-3 pt-2 sm:col-span-2 sm:flex-row sm:items-center">
 						<button
 							type="submit"
-							class="rounded-full bg-blue-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-blue-950/30 transition hover:bg-blue-400"
+							class="inline-flex items-center justify-center gap-2 rounded-full bg-blue-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-blue-950/30 transition hover:bg-blue-400 disabled:cursor-not-allowed disabled:opacity-80"
+							disabled={isSavingAchievement}
 						>
-							Save achievement
+							{#if isSavingAchievement}
+								<span
+									aria-hidden="true"
+									class="h-3.5 w-3.5 rounded-full border-2 border-white/30 border-t-white motion-safe:animate-spin"
+								></span>
+								Saving...
+							{:else}
+								Save achievement
+							{/if}
 						</button>
 
 						<button
 							type="button"
 							class="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-zinc-300 hover:bg-white/10 hover:text-white"
+							disabled={isSavingAchievement}
 							onclick={() => (showAddAchievement = false)}
 						>
 							Cancel
@@ -492,8 +536,8 @@
 				class="w-full overflow-hidden rounded-2xl border border-white/10 bg-zinc-950/85 shadow-2xl shadow-black/50 ring-1 ring-white/5 md:h-88"
 				transition:scale={{ duration: 140, start: 0.98 }}
 			>
-					<div class="grid h-full gap-0 md:grid-cols-[1.05fr_1fr]">
-						<div class="relative h-72 overflow-hidden bg-zinc-900 md:h-full">
+				<div class="grid h-full gap-0 md:grid-cols-[1.05fr_1fr]">
+					<div class="relative h-72 overflow-hidden bg-zinc-900 md:h-full">
 						{#if getModalSrc(selectedMedal)}
 							<img
 								src={getModalSrc(selectedMedal)}
@@ -510,14 +554,14 @@
 								Coming Soon
 							</div>
 						{/if}
-							<div
-								class="pointer-events-none absolute inset-0 bg-linear-to-t from-black/20 to-transparent"
-							></div>
-						</div>
-
 						<div
-							class="min-h-0 overflow-y-auto border-t border-white/10 p-6 sm:p-8 md:border-t-0 md:border-l"
-						>
+							class="pointer-events-none absolute inset-0 bg-linear-to-t from-black/20 to-transparent"
+						></div>
+					</div>
+
+					<div
+						class="min-h-0 overflow-y-auto border-t border-white/10 p-6 sm:p-8 md:border-t-0 md:border-l"
+					>
 						<div class="flex items-start gap-4">
 							<div>
 								<h2 class="text-2xl font-semibold tracking-tight text-zinc-100">
@@ -536,7 +580,7 @@
 							</button>
 						</div>
 
-							<div class="space-y-2 text-sm text-zinc-300">
+						<div class="space-y-2 text-sm text-zinc-300">
 							<p>
 								<span class="text-zinc-500">Date:</span>
 								{selectedMedal.eventDate ?? 'To be added'}
@@ -559,33 +603,33 @@
 									To be added
 								{/if}
 							</p>
+						</div>
+
+						{#if selectedMedal.images && selectedMedal.images.length > 1}
+							<div class="mt-5 flex gap-2 overflow-x-auto pb-1">
+								{#each selectedMedal.images as image, index (image.id ?? image.fullSrc)}
+									<button
+										type="button"
+										class={'overflow-hidden rounded-md ring-1 ring-inset transition ' +
+											(selectedModalImageIndex === index
+												? 'ring-blue-300/70'
+												: 'ring-white/10 hover:ring-white/20')}
+										onclick={() => (selectedModalImageIndex = index)}
+										aria-label={`Show image ${index + 1}`}
+									>
+										<img
+											src={getModalThumbnail(selectedMedal, index)}
+											alt={`${selectedMedal.title} preview ${index + 1}`}
+											class="h-14 w-14 object-cover"
+											loading="lazy"
+											decoding="async"
+										/>
+									</button>
+								{/each}
 							</div>
+						{/if}
 
-							{#if selectedMedal.images && selectedMedal.images.length > 1}
-								<div class="mt-5 flex gap-2 overflow-x-auto pb-1">
-									{#each selectedMedal.images as image, index (image.id ?? image.fullSrc)}
-										<button
-											type="button"
-											class={'overflow-hidden rounded-md ring-1 ring-inset transition ' +
-												(selectedModalImageIndex === index
-													? 'ring-blue-300/70'
-													: 'ring-white/10 hover:ring-white/20')}
-											onclick={() => (selectedModalImageIndex = index)}
-											aria-label={`Show image ${index + 1}`}
-										>
-											<img
-												src={getModalThumbnail(selectedMedal, index)}
-												alt={`${selectedMedal.title} preview ${index + 1}`}
-												class="h-14 w-14 object-cover"
-												loading="lazy"
-												decoding="async"
-											/>
-										</button>
-									{/each}
-								</div>
-							{/if}
-
-							{#if selectedMedal.stravaUrl}
+						{#if selectedMedal.stravaUrl}
 							<a
 								href={selectedMedal.stravaUrl}
 								target="_blank"
@@ -600,6 +644,63 @@
 							{selectedMedal.description ??
 								'A short race note can go here — conditions, race strategy, and key moments from the day.'}
 						</p>
+
+						{#if isSignedIn && selectedMedal.id}
+							<form
+								method="POST"
+								action="?/deleteAchievement"
+								onsubmit={confirmDeleteAchievement}
+								use:enhance={() => {
+									isDeletingAchievement = true;
+
+									return async ({ result, update }) => {
+										await update();
+										isDeletingAchievement = false;
+										if (result.type === 'success') {
+											selectedMedal = null;
+										}
+									};
+								}}
+								class="mt-6 border-t border-white/10 pt-5"
+							>
+								<input type="hidden" name="achievementId" value={selectedMedal.id} />
+								<div class="flex items-center justify-end">
+									<button
+										type="submit"
+										class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-zinc-400 transition hover:border-red-400/25 hover:bg-red-500/10 hover:text-red-200 disabled:cursor-not-allowed disabled:opacity-70"
+										disabled={isDeletingAchievement}
+									>
+										{#if isDeletingAchievement}
+											<span
+												aria-hidden="true"
+												class="h-3.5 w-3.5 rounded-full border-2 border-current/25 border-t-current motion-safe:animate-spin"
+											></span>
+											Deleting...
+										{:else}
+											<svg
+												aria-hidden="true"
+												viewBox="0 0 24 24"
+												class="h-3.5 w-3.5"
+												fill="none"
+												stroke="currentColor"
+												stroke-width="1.8"
+											>
+												<path
+													stroke-linecap="round"
+													stroke-linejoin="round"
+													d="M4 7h16m-10 4v6m4-6v6M9 7l1-2h4l1 2m-7 0 1 12h8l1-12"
+												/>
+											</svg>
+											Delete achievement
+										{/if}
+									</button>
+								</div>
+
+								{#if form?.message}
+									<p class="mt-3 text-right text-sm text-red-300">{form.message}</p>
+								{/if}
+							</form>
+						{/if}
 					</div>
 				</div>
 			</div>

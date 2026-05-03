@@ -1,4 +1,4 @@
-import { asc, desc, eq, inArray } from 'drizzle-orm';
+import { and, asc, desc, eq, inArray } from 'drizzle-orm';
 import { del } from '@vercel/blob';
 import { env } from '$env/dynamic/private';
 import { fail } from '@sveltejs/kit';
@@ -206,6 +206,67 @@ export const actions: Actions = {
 
 		return {
 			createAchievement: { success: true }
+		};
+	},
+	deleteAchievement: async ({ locals, request }) => {
+		if (!locals.user) {
+			return fail(401, {
+				deleteAchievement: { success: false },
+				message: 'Please sign in before deleting an achievement.'
+			});
+		}
+
+		const formData = await request.formData();
+		const achievementId = Number(formData.get('achievementId'));
+
+		if (!Number.isInteger(achievementId) || achievementId <= 0) {
+			return fail(400, {
+				deleteAchievement: { success: false },
+				message: 'Choose a valid achievement to delete.'
+			});
+		}
+
+		const [existingAchievement] = await db
+			.select({
+				id: achievement.id,
+				imageUrl: achievement.imageUrl
+			})
+			.from(achievement)
+			.where(and(eq(achievement.id, achievementId), eq(achievement.userId, locals.user.id)))
+			.limit(1);
+
+		if (!existingAchievement) {
+			return fail(404, {
+				deleteAchievement: { success: false },
+				message: 'Achievement not found.'
+			});
+		}
+
+		const images = await db
+			.select({
+				fullUrl: achievementImage.fullUrl,
+				thumbnailUrl: achievementImage.thumbnailUrl
+			})
+			.from(achievementImage)
+			.where(eq(achievementImage.achievementId, achievementId));
+
+		await db.delete(achievement).where(eq(achievement.id, achievementId));
+
+		const blobUrls = Array.from(
+			new Set(
+				[
+					existingAchievement.imageUrl,
+					...images.flatMap((image) => [image.fullUrl, image.thumbnailUrl])
+				].filter((value): value is string => Boolean(value))
+			)
+		);
+
+		if (blobUrls.length && env.BLOB_READ_WRITE_TOKEN) {
+			await del(blobUrls, { token: env.BLOB_READ_WRITE_TOKEN });
+		}
+
+		return {
+			deleteAchievement: { success: true, id: achievementId }
 		};
 	}
 };

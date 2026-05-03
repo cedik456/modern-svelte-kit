@@ -5,6 +5,7 @@
 	import type { ActionData } from './$types';
 
 	let { form }: { form: ActionData } = $props();
+	let isSigningIn = $state(false);
 </script>
 
 <section class="flex min-h-[calc(100vh-10rem)] items-center justify-center">
@@ -36,7 +37,19 @@
 				<h2 class="mt-3 text-3xl font-semibold tracking-tight text-zinc-100">Login</h2>
 				<p class="mt-2 text-sm text-zinc-400">Access your personal medal archive.</p>
 
-				<form method="post" action="?/signInEmail" use:enhance class="mt-8 space-y-4">
+				<form
+					method="post"
+					action="?/signInEmail"
+					use:enhance={() => {
+						isSigningIn = true;
+
+						return async ({ update }) => {
+							await update();
+							isSigningIn = false;
+						};
+					}}
+					class="mt-8 space-y-4"
+				>
 					<label class="block text-sm">
 						<span class="mb-1 block text-zinc-300">Email</span>
 						<input
@@ -63,9 +76,18 @@
 
 					<button
 						type="submit"
-						class="w-full rounded-md bg-blue-500 px-3 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-950/40 transition hover:bg-blue-400"
+						class="inline-flex w-full items-center justify-center gap-2 rounded-md bg-blue-500 px-3 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-950/40 transition hover:bg-blue-400 disabled:cursor-not-allowed disabled:opacity-80"
+						disabled={isSigningIn}
 					>
-						Sign in
+						{#if isSigningIn}
+							<span
+								aria-hidden="true"
+								class="h-3.5 w-3.5 rounded-full border-2 border-white/30 border-t-white motion-safe:animate-spin"
+							></span>
+							Signing in...
+						{:else}
+							Sign in
+						{/if}
 					</button>
 				</form>
 
