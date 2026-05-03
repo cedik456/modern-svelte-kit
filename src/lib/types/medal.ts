@@ -1,4 +1,16 @@
+export type MedalImage = {
+	id?: number;
+	src: string;
+	thumbnailSrc: string;
+	fullSrc: string;
+	width?: number;
+	height?: number;
+	thumbnailWidth?: number;
+	thumbnailHeight?: number;
+};
+
 export type Medal = {
+	id?: number;
 	title: string;
 	tag: string;
 	distanceLabel?: string;
@@ -12,4 +24,5 @@ export type Medal = {
 	src?: string;
 	thumbnailSrc?: string;
 	fullSrc?: string;
+	images?: MedalImage[];
 };
