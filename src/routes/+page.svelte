@@ -18,7 +18,9 @@
 	] as const;
 	let active = $state<(typeof filters)[number]>('All Entries');
 	let selectedMedal = $state<Medal | null>(null);
+	let selectedModalImageIndex = $state(0);
 	let showAddAchievement = $state(false);
+	let imageValidationMessage = $state('');
 
 	$effect(() => {
 		if (form?.message) showAddAchievement = true;
@@ -29,7 +31,55 @@
 	}
 
 	function getModalSrc(medal: Medal) {
+		const galleryImage = medal.images?.[selectedModalImageIndex];
+		if (galleryImage) return galleryImage.fullSrc;
 		return medal.fullSrc ?? medal.src ?? medal.thumbnailSrc;
+	}
+
+	function getModalThumbnail(medal: Medal, index: number) {
+		return medal.images?.[index]?.thumbnailSrc;
+	}
+
+	function openMedal(medal: Medal) {
+		selectedMedal = medal;
+		selectedModalImageIndex = 0;
+	}
+
+	function validateSelectedImages(files: FileList | null) {
+		const selectedFiles = Array.from(files ?? []);
+		const totalBytes = selectedFiles.reduce((total, file) => total + file.size, 0);
+
+		if (selectedFiles.length > 6) {
+			imageValidationMessage = 'Choose up to 6 photos.';
+			return false;
+		}
+
+		if (selectedFiles.some((file) => !file.type.startsWith('image/'))) {
+			imageValidationMessage = 'Only image files are allowed.';
+			return false;
+		}
+
+		if (selectedFiles.some((file) => file.size > 2 * 1024 * 1024)) {
+			imageValidationMessage = 'Each photo must be 2MB or smaller.';
+			return false;
+		}
+
+		if (totalBytes > 4 * 1024 * 1024) {
+			imageValidationMessage = 'Selected photos must be 4MB or smaller in total.';
+			return false;
+		}
+
+		imageValidationMessage = '';
+		return true;
+	}
+
+	function handleAchievementSubmit(event: SubmitEvent) {
+		const formElement = event.currentTarget as HTMLFormElement;
+		const imageInput = formElement.elements.namedItem('images') as HTMLInputElement | null;
+
+		if (!validateSelectedImages(imageInput?.files ?? null)) {
+			event.preventDefault();
+		}
 	}
 
 	function getCardSrcSet(medal: Medal) {
@@ -151,7 +201,7 @@
 					<button
 						type="button"
 						class="group cursor-pointer text-left"
-						onclick={() => (selectedMedal = medal)}
+						onclick={() => openMedal(medal)}
 					>
 						<article>
 							<div
@@ -271,10 +321,14 @@
 				<form
 					method="POST"
 					action="?/createAchievement"
+					enctype="multipart/form-data"
+					onsubmit={handleAchievementSubmit}
 					use:enhance={() => {
 						return async ({ result, update }) => {
 							await update();
-							if (result.type === 'success') showAddAchievement = false;
+							if (result.type === 'success') {
+								showAddAchievement = false;
+							}
 						};
 					}}
 					class="grid max-h-[calc(100vh-11rem)] gap-4 overflow-y-auto p-5 sm:grid-cols-2 sm:p-6"
@@ -354,12 +408,22 @@
 					</label>
 
 					<label class="block text-sm sm:col-span-2">
-						<span class="mb-1 block text-zinc-300">Image URL or `/medals/...` path</span>
+						<span class="mb-1 block text-zinc-300">Photos</span>
 						<input
-							name="imageUrl"
+							type="file"
+							name="images"
+							multiple
+							accept="image/*"
 							class="w-full rounded-md border border-white/10 bg-zinc-900 px-3 py-2.5 text-zinc-100 outline-none ring-blue-400/30 transition placeholder:text-zinc-600 focus:border-blue-300/50 focus:ring-4"
-							placeholder="/medals/legazpi_marathon_2026.webp"
+							onchange={(event) => validateSelectedImages(event.currentTarget.files)}
 						/>
+						<p class="mt-2 text-xs leading-relaxed text-zinc-500">
+							Upload up to 6 photos, 2MB each and 4MB total. Each photo is converted to WebP,
+							saved as a full image and thumbnail, and optimized for the archive grid.
+						</p>
+						{#if imageValidationMessage}
+							<p class="mt-2 text-xs text-red-300">{imageValidationMessage}</p>
+						{/if}
 					</label>
 
 					<label class="block text-sm sm:col-span-2">
@@ -417,8 +481,8 @@
 				class="w-full overflow-hidden rounded-2xl border border-white/10 bg-zinc-950/85 shadow-2xl shadow-black/50 ring-1 ring-white/5 md:h-88"
 				transition:scale={{ duration: 140, start: 0.98 }}
 			>
-				<div class="grid h-full gap-0 md:grid-cols-[1.05fr_1fr]">
-					<div class="relative h-72 overflow-hidden bg-zinc-900 md:h-full">
+					<div class="grid h-full gap-0 md:grid-cols-[1.05fr_1fr]">
+						<div class="relative h-72 overflow-hidden bg-zinc-900 md:h-full">
 						{#if getModalSrc(selectedMedal)}
 							<img
 								src={getModalSrc(selectedMedal)}
@@ -435,14 +499,14 @@
 								Coming Soon
 							</div>
 						{/if}
-						<div
-							class="pointer-events-none absolute inset-0 bg-linear-to-t from-black/20 to-transparent"
-						></div>
-					</div>
+							<div
+								class="pointer-events-none absolute inset-0 bg-linear-to-t from-black/20 to-transparent"
+							></div>
+						</div>
 
-					<div
-						class="min-h-0 overflow-y-auto border-t border-white/10 p-6 sm:p-8 md:border-t-0 md:border-l"
-					>
+						<div
+							class="min-h-0 overflow-y-auto border-t border-white/10 p-6 sm:p-8 md:border-t-0 md:border-l"
+						>
 						<div class="flex items-start gap-4">
 							<div>
 								<h2 class="text-2xl font-semibold tracking-tight text-zinc-100">
@@ -461,7 +525,7 @@
 							</button>
 						</div>
 
-						<div class="space-y-2 text-sm text-zinc-300">
+							<div class="space-y-2 text-sm text-zinc-300">
 							<p>
 								<span class="text-zinc-500">Date:</span>
 								{selectedMedal.eventDate ?? 'To be added'}
@@ -484,9 +548,33 @@
 									To be added
 								{/if}
 							</p>
-						</div>
+							</div>
 
-						{#if selectedMedal.stravaUrl}
+							{#if selectedMedal.images && selectedMedal.images.length > 1}
+								<div class="mt-5 flex gap-2 overflow-x-auto pb-1">
+									{#each selectedMedal.images as image, index (image.id ?? image.fullSrc)}
+										<button
+											type="button"
+											class={'overflow-hidden rounded-md ring-1 ring-inset transition ' +
+												(selectedModalImageIndex === index
+													? 'ring-blue-300/70'
+													: 'ring-white/10 hover:ring-white/20')}
+											onclick={() => (selectedModalImageIndex = index)}
+											aria-label={`Show image ${index + 1}`}
+										>
+											<img
+												src={getModalThumbnail(selectedMedal, index)}
+												alt={`${selectedMedal.title} preview ${index + 1}`}
+												class="h-14 w-14 object-cover"
+												loading="lazy"
+												decoding="async"
+											/>
+										</button>
+									{/each}
+								</div>
+							{/if}
+
+							{#if selectedMedal.stravaUrl}
 							<a
 								href={selectedMedal.stravaUrl}
 								target="_blank"

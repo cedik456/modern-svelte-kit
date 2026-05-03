@@ -15,6 +15,13 @@
       "when": 1777779615745,
       "tag": "0001_workable_baron_strucker",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1777784914383,
+      "tag": "0002_lively_silver_sable",
+      "breakpoints": true
     }
   ]
 }

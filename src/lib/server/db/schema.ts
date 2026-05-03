@@ -36,4 +36,26 @@ export const achievement = pgTable(
 	]
 );
 
+export const achievementImage = pgTable(
+	'achievement_image',
+	{
+		id: serial('id').primaryKey(),
+		achievementId: integer('achievement_id')
+			.notNull()
+			.references(() => achievement.id, { onDelete: 'cascade' }),
+		fullUrl: text('full_url').notNull(),
+		thumbnailUrl: text('thumbnail_url').notNull(),
+		sortOrder: integer('sort_order').notNull().default(0),
+		width: integer('width'),
+		height: integer('height'),
+		thumbnailWidth: integer('thumbnail_width'),
+		thumbnailHeight: integer('thumbnail_height'),
+		createdAt: timestamp('created_at').defaultNow().notNull()
+	},
+	(table) => [
+		index('achievement_image_achievement_id_idx').on(table.achievementId),
+		index('achievement_image_sort_order_idx').on(table.sortOrder)
+	]
+);
+
 export * from './auth.schema';
