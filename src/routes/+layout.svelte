@@ -51,17 +51,20 @@
 					/>
 				</div>
 
-				<div
-					class="relative flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full border border-blue-400/20 bg-zinc-900 text-xs font-semibold text-zinc-100 ring-1 ring-white/10 sm:h-9 sm:w-9"
-					aria-label="Profile placeholder"
-				>
-					<div
-						class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(96,165,250,0.32),transparent_58%),linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0))]"
-					></div>
-					<span class="relative text-sm tracking-[0.08em]">{userInitial}</span>
-				</div>
-
 				{#if user}
+					{#if data.publicUsername}
+						<a href={resolve(`/u/${data.publicUsername}`)}>
+							<div
+								class="relative flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full border border-blue-400/20 bg-zinc-900 text-xs font-semibold text-zinc-100 ring-1 ring-white/10 sm:h-9 sm:w-9"
+								aria-label="Profile placeholder"
+							>
+								<div
+									class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(96,165,250,0.32),transparent_58%),linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0))]"
+								></div>
+								<span class="relative text-sm tracking-[0.08em]">{userInitial}</span>
+							</div>
+						</a>
+					{/if}
 					<form method="POST" action="/auth/logout" class="hidden sm:block">
 						<button
 							type="submit"
