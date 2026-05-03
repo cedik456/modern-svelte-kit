@@ -3,8 +3,11 @@
 	import favicon from '$lib/assets/favicon.png';
 	import { archiveSearch } from '$lib/stores/archive';
 	import '../app.css';
+	import type { LayoutProps } from './$types';
 
-	let { children } = $props();
+	let { data, children }: LayoutProps = $props();
+	const user = $derived(data.user);
+	const userInitial = $derived((user?.name ?? user?.email ?? 'G').charAt(0).toUpperCase());
 </script>
 
 <svelte:head>
@@ -55,8 +58,26 @@
 					<div
 						class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(96,165,250,0.32),transparent_58%),linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0))]"
 					></div>
-					<span class="relative text-sm tracking-[0.08em]">C</span>
+					<span class="relative text-sm tracking-[0.08em]">{userInitial}</span>
 				</div>
+
+				{#if user}
+					<form method="POST" action="/logout" class="hidden sm:block">
+						<button
+							type="submit"
+							class="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-zinc-200 hover:bg-white/10 hover:text-white"
+						>
+							Logout
+						</button>
+					</form>
+				{:else}
+					<a
+						href={resolve('/auth/login')}
+						class="hidden rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-zinc-200 hover:bg-white/10 hover:text-white sm:inline-flex"
+					>
+						Login
+					</a>
+				{/if}
 			</div>
 		</div>
 

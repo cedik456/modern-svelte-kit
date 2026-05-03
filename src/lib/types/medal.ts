@@ -1,4 +1,5 @@
 export type Medal = {
+	id?: number;
 	title: string;
 	tag: string;
 	distanceLabel?: string;

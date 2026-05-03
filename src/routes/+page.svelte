@@ -3,7 +3,10 @@
 	import { upcomingRaces } from '$lib/data/races';
 	import { archiveSearch } from '$lib/stores/archive';
 	import type { Medal } from '$lib/types/medal';
+	import type { ActionData, PageData } from './$types';
 	import { fade, scale } from 'svelte/transition';
+
+	let { data, form }: { data: PageData; form: ActionData } = $props();
 
 	const filters = [
 		'All Entries',
@@ -62,9 +65,11 @@
 	}
 
 	let searchQuery = $derived($archiveSearch.trim().toLowerCase());
+	let isSignedIn = $derived(Boolean(data.user));
+	let archiveEntries = $derived(isSignedIn ? data.achievements : medals);
 
 	let filteredMedals = $derived(
-		medals.filter((medal) => matchesSearch(medal, searchQuery) && matchesFilter(medal, active))
+		archiveEntries.filter((medal) => matchesSearch(medal, searchQuery) && matchesFilter(medal, active))
 	);
 
 	let filteredUpcomingRaces = $derived(
@@ -86,7 +91,11 @@
 			<div>
 				<h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">Collection</h1>
 				<p class="mt-3 max-w-2xl text-sm leading-relaxed text-zinc-400">
-					An archive of every race I’ve been in.
+					{#if isSignedIn}
+						Your personal race archive, saved in the database and attached to your account.
+					{:else}
+						An archive of every race I’ve been in. Sign in to build your own archive.
+					{/if}
 				</p>
 			</div>
 
@@ -112,8 +121,135 @@
 			</div>
 		</div>
 
+		{#if isSignedIn}
+			<section class="rounded-2xl border border-white/10 bg-zinc-900/60 p-5 sm:p-6">
+				<div class="flex flex-col gap-2">
+					<h2 class="text-lg font-semibold text-zinc-100">Add an achievement</h2>
+					<p class="text-sm text-zinc-400">
+						This form writes directly to the new `achievement` table tied to your user account.
+					</p>
+				</div>
+
+				<form method="POST" action="?/createAchievement" class="mt-5 grid gap-4 md:grid-cols-2">
+					<label class="block text-sm">
+						<span class="mb-1 block text-zinc-300">Title</span>
+						<input
+							name="title"
+							required
+							class="w-full rounded-md border border-white/10 bg-zinc-950 px-3 py-2 text-zinc-100"
+							placeholder="Legazpi Marathon 2026"
+						/>
+					</label>
+
+					<label class="block text-sm">
+						<span class="mb-1 block text-zinc-300">Distance</span>
+						<input
+							name="distanceLabel"
+							class="w-full rounded-md border border-white/10 bg-zinc-950 px-3 py-2 text-zinc-100"
+							placeholder="Full Marathon"
+						/>
+					</label>
+
+					<label class="block text-sm">
+						<span class="mb-1 block text-zinc-300">Event date</span>
+						<input
+							type="date"
+							name="eventDate"
+							class="w-full rounded-md border border-white/10 bg-zinc-950 px-3 py-2 text-zinc-100"
+						/>
+					</label>
+
+					<label class="block text-sm">
+						<span class="mb-1 block text-zinc-300">Location</span>
+						<input
+							name="location"
+							class="w-full rounded-md border border-white/10 bg-zinc-950 px-3 py-2 text-zinc-100"
+							placeholder="Legazpi, Albay"
+						/>
+					</label>
+
+					<label class="block text-sm">
+						<span class="mb-1 block text-zinc-300">Finish time</span>
+						<input
+							name="finishTime"
+							class="w-full rounded-md border border-white/10 bg-zinc-950 px-3 py-2 text-zinc-100"
+							placeholder="3:52:30"
+						/>
+					</label>
+
+					<label class="block text-sm">
+						<span class="mb-1 block text-zinc-300">Pace</span>
+						<input
+							name="pace"
+							class="w-full rounded-md border border-white/10 bg-zinc-950 px-3 py-2 text-zinc-100"
+							placeholder="5:40 /km"
+						/>
+					</label>
+
+					<label class="block text-sm">
+						<span class="mb-1 block text-zinc-300">Placement</span>
+						<input
+							name="placement"
+							class="w-full rounded-md border border-white/10 bg-zinc-950 px-3 py-2 text-zinc-100"
+							placeholder="Top 18 Overall"
+						/>
+					</label>
+
+					<label class="block text-sm">
+						<span class="mb-1 block text-zinc-300">Strava URL</span>
+						<input
+							type="url"
+							name="stravaUrl"
+							class="w-full rounded-md border border-white/10 bg-zinc-950 px-3 py-2 text-zinc-100"
+							placeholder="https://strava.app.link/..."
+						/>
+					</label>
+
+					<label class="block text-sm md:col-span-2">
+						<span class="mb-1 block text-zinc-300">Image URL or `/medals/...` path</span>
+						<input
+							name="imageUrl"
+							class="w-full rounded-md border border-white/10 bg-zinc-950 px-3 py-2 text-zinc-100"
+							placeholder="/medals/legazpi_marathon_2026.webp"
+						/>
+					</label>
+
+					<label class="block text-sm md:col-span-2">
+						<span class="mb-1 block text-zinc-300">Description</span>
+						<textarea
+							name="description"
+							rows="4"
+							class="w-full rounded-md border border-white/10 bg-zinc-950 px-3 py-2 text-zinc-100"
+							placeholder="Race notes, conditions, and what made the event memorable."
+						></textarea>
+					</label>
+
+					<div class="md:col-span-2 flex flex-wrap items-center gap-3">
+						<button
+							type="submit"
+							class="rounded-full bg-blue-500/20 px-4 py-2 text-sm font-medium text-blue-100 hover:bg-blue-500/30"
+						>
+							Save achievement
+						</button>
+
+						{#if form?.message}
+							<p class="text-sm text-red-300">{form.message}</p>
+						{:else if form?.createAchievement?.success}
+							<p class="text-sm text-emerald-300">Achievement saved.</p>
+						{/if}
+					</div>
+				</form>
+			</section>
+		{:else}
+			<section class="rounded-2xl border border-white/10 bg-zinc-900/40 p-5 text-sm text-zinc-300">
+				Create an account to save your own race results, finish times, links, and medal images in
+				Postgres.
+			</section>
+		{/if}
+
 		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-			{#each visibleEntries as medal (medal.title)}
+			{#if visibleEntries.length}
+				{#each visibleEntries as medal (medal.title)}
 				<button
 					type="button"
 					class="group cursor-pointer text-left"
@@ -147,7 +283,18 @@
 						{/if}
 					</article>
 				</button>
-			{/each}
+				{/each}
+			{:else}
+				<div class="col-span-full rounded-2xl border border-dashed border-white/10 bg-zinc-900/40 p-8 text-sm text-zinc-400">
+					{#if active === 'Upcoming'}
+						No upcoming races match your search yet.
+					{:else if isSignedIn}
+						Your archive is empty. Add your first achievement above.
+					{:else}
+						No entries match your search.
+					{/if}
+				</div>
+			{/if}
 		</div>
 	</div>
 </section>
