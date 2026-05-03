@@ -101,11 +101,11 @@
 		class="pointer-events-none absolute -inset-x-8 -top-24 h-64 bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.10),transparent_60%)]"
 	></div>
 
-	<div class="relative flex flex-col gap-8">
-		<div class="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-end">
-			<div>
-				<h1 class="text-3xl font-semibold tracking-tight sm:text-4xl">Collection</h1>
-				<p class="mt-3 max-w-2xl text-sm leading-relaxed text-zinc-400">
+	<div class="relative flex min-w-0 flex-col gap-6 sm:gap-8">
+		<div class="grid min-w-0 gap-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+			<div class="min-w-0">
+				<h1 class="text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">Collection</h1>
+				<p class="mt-2 max-w-2xl text-sm leading-relaxed text-zinc-400 sm:mt-3">
 					{#if isSignedIn}
 						Your personal race archive, saved in the database and attached to your account.
 					{:else}
@@ -114,9 +114,9 @@
 				</p>
 			</div>
 
-			<div class="flex flex-col gap-3 lg:items-end">
+			<div class="flex min-w-0 flex-col gap-3 lg:items-end">
 				<div
-					class="-mx-4 overflow-x-auto overflow-y-hidden px-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:px-0"
+					class="-mx-4 max-w-[calc(100vw-2rem)] overflow-x-auto overflow-y-hidden px-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:max-w-full sm:px-0"
 				>
 					<div class="flex w-max items-center gap-2 sm:w-auto sm:flex-wrap">
 						{#each filters as filter (filter)}
@@ -154,7 +154,11 @@
 						onclick={() => (selectedMedal = medal)}
 					>
 						<article>
-							<div class="aspect-square overflow-hidden rounded-md ring-1 ring-inset ring-white/10">
+							<div
+								class={getCardSrc(medal)
+									? 'aspect-square overflow-hidden rounded-md ring-1 ring-inset ring-white/10'
+									: 'aspect-[4/3] overflow-hidden rounded-md ring-1 ring-inset ring-white/10 sm:aspect-square'}
+							>
 								{#if getCardSrc(medal)}
 									<img
 										src={getCardSrc(medal)}
@@ -184,7 +188,7 @@
 				{/each}
 			{:else}
 				<div
-					class="col-span-full rounded-2xl border border-dashed border-white/10 bg-zinc-900/40 p-8 text-sm text-zinc-400"
+					class="col-span-full rounded-2xl border border-dashed border-white/10 bg-zinc-900/40 p-6 text-sm text-zinc-400 sm:p-8"
 				>
 					{#if active === 'Upcoming'}
 						No upcoming races match your search yet.
@@ -200,14 +204,14 @@
 </section>
 
 {#if isSignedIn}
-	<div class="fixed bottom-5 right-5 z-60 sm:bottom-6 sm:right-6">
+	<div class="fixed bottom-4 right-4 z-60 sm:bottom-6 sm:right-6">
 		<div
 			class="pointer-events-none absolute inset-0 rounded-full bg-blue-400/25 blur-md motion-safe:animate-pulse"
 		></div>
 		<button
 			type="button"
 			onclick={() => (showAddAchievement = true)}
-			class="relative inline-flex items-center cursor-pointer gap-2 rounded-full border border-blue-300/35 bg-zinc-950/75 px-4 py-2 text-xs font-semibold text-blue-100 shadow-lg shadow-black/30 backdrop-blur-sm ring-1 ring-white/10 transition hover:border-blue-200/60 hover:bg-blue-400/10 hover:text-white"
+			class="relative inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-blue-300/35 bg-zinc-950/80 px-3 py-2 text-xs font-semibold text-blue-100 shadow-lg shadow-black/30 backdrop-blur-sm ring-1 ring-white/10 transition hover:border-blue-200/60 hover:bg-blue-400/10 hover:text-white sm:gap-2 sm:px-4"
 			aria-label="Add achievement"
 		>
 			<span
