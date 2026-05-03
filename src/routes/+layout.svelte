@@ -78,12 +78,6 @@
 						>
 							Login
 						</a>
-						<a
-							href={resolve('/auth/signup')}
-							class="rounded-full bg-blue-500 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-400"
-						>
-							Sign up
-						</a>
 					</div>
 				{/if}
 			</div>
@@ -124,9 +118,6 @@
 					</form>
 				{:else}
 					<a href={resolve('/auth/login')} class="hover:text-white">Login</a>
-					<a href={resolve('/auth/signup')} class="font-medium text-blue-200 hover:text-blue-100">
-						Sign up
-					</a>
 				{/if}
 			</nav>
 		</div>

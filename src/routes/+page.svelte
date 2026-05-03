@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import { medals } from '$lib/data/medals';
 	import { upcomingRaces } from '$lib/data/races';
 	import { archiveSearch } from '$lib/stores/archive';
@@ -17,6 +18,11 @@
 	] as const;
 	let active = $state<(typeof filters)[number]>('All Entries');
 	let selectedMedal = $state<Medal | null>(null);
+	let showAddAchievement = $state(false);
+
+	$effect(() => {
+		if (form?.message) showAddAchievement = true;
+	});
 
 	function getCardSrc(medal: Medal) {
 		return medal.thumbnailSrc ?? medal.src ?? medal.fullSrc;
@@ -69,7 +75,9 @@
 	let archiveEntries = $derived(isSignedIn ? data.achievements : medals);
 
 	let filteredMedals = $derived(
-		archiveEntries.filter((medal) => matchesSearch(medal, searchQuery) && matchesFilter(medal, active))
+		archiveEntries.filter(
+			(medal) => matchesSearch(medal, searchQuery) && matchesFilter(medal, active)
+		)
 	);
 
 	let filteredUpcomingRaces = $derived(
@@ -79,7 +87,14 @@
 	let visibleEntries = $derived(active === 'Upcoming' ? filteredUpcomingRaces : filteredMedals);
 </script>
 
-<svelte:window onkeydown={(event) => event.key === 'Escape' && (selectedMedal = null)} />
+<svelte:window
+	onkeydown={(event) => {
+		if (event.key === 'Escape') {
+			selectedMedal = null;
+			showAddAchievement = false;
+		}
+	}}
+/>
 
 <section class="relative">
 	<div
@@ -99,148 +114,31 @@
 				</p>
 			</div>
 
-			<div
-				class="-mx-4 overflow-x-auto overflow-y-hidden px-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:px-0"
-			>
-				<div class="flex w-max items-center gap-2 sm:w-auto sm:flex-wrap">
-					{#each filters as filter (filter)}
-						<button
-							type="button"
-							onclick={() => (active = filter)}
-							class={'inline-flex items-center rounded-full px-3 py-1.5 text-xs font-medium ring-1 ring-inset transition ' +
-								(active === filter
-									? 'bg-zinc-200 text-zinc-900 ring-white/20'
-									: filter === 'Upcoming'
-										? 'bg-blue-400/5 text-blue-200 ring-blue-400/25 hover:bg-blue-400/10'
-										: 'bg-zinc-900 text-zinc-200 ring-white/10 hover:bg-zinc-800')}
-						>
-							{filter}
-						</button>
-					{/each}
+			<div class="flex flex-col gap-3 lg:items-end">
+				<div
+					class="-mx-4 overflow-x-auto overflow-y-hidden px-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:px-0"
+				>
+					<div class="flex w-max items-center gap-2 sm:w-auto sm:flex-wrap">
+						{#each filters as filter (filter)}
+							<button
+								type="button"
+								onclick={() => (active = filter)}
+								class={'inline-flex items-center rounded-full px-3 py-1.5 text-xs font-medium ring-1 ring-inset transition ' +
+									(active === filter
+										? 'bg-zinc-200 text-zinc-900 ring-white/20'
+										: filter === 'Upcoming'
+											? 'bg-blue-400/5 text-blue-200 ring-blue-400/25 hover:bg-blue-400/10'
+											: 'bg-zinc-900 text-zinc-200 ring-white/10 hover:bg-zinc-800')}
+							>
+								{filter}
+							</button>
+						{/each}
+					</div>
 				</div>
 			</div>
 		</div>
 
-		{#if isSignedIn}
-			<section class="rounded-2xl border border-white/10 bg-zinc-900/60 p-5 sm:p-6">
-				<div class="flex flex-col gap-2">
-					<h2 class="text-lg font-semibold text-zinc-100">Add an achievement</h2>
-					<p class="text-sm text-zinc-400">
-						This form writes directly to the new `achievement` table tied to your user account.
-					</p>
-				</div>
-
-				<form method="POST" action="?/createAchievement" class="mt-5 grid gap-4 md:grid-cols-2">
-					<label class="block text-sm">
-						<span class="mb-1 block text-zinc-300">Title</span>
-						<input
-							name="title"
-							required
-							class="w-full rounded-md border border-white/10 bg-zinc-950 px-3 py-2 text-zinc-100"
-							placeholder="Legazpi Marathon 2026"
-						/>
-					</label>
-
-					<label class="block text-sm">
-						<span class="mb-1 block text-zinc-300">Distance</span>
-						<input
-							name="distanceLabel"
-							class="w-full rounded-md border border-white/10 bg-zinc-950 px-3 py-2 text-zinc-100"
-							placeholder="Full Marathon"
-						/>
-					</label>
-
-					<label class="block text-sm">
-						<span class="mb-1 block text-zinc-300">Event date</span>
-						<input
-							type="date"
-							name="eventDate"
-							class="w-full rounded-md border border-white/10 bg-zinc-950 px-3 py-2 text-zinc-100"
-						/>
-					</label>
-
-					<label class="block text-sm">
-						<span class="mb-1 block text-zinc-300">Location</span>
-						<input
-							name="location"
-							class="w-full rounded-md border border-white/10 bg-zinc-950 px-3 py-2 text-zinc-100"
-							placeholder="Legazpi, Albay"
-						/>
-					</label>
-
-					<label class="block text-sm">
-						<span class="mb-1 block text-zinc-300">Finish time</span>
-						<input
-							name="finishTime"
-							class="w-full rounded-md border border-white/10 bg-zinc-950 px-3 py-2 text-zinc-100"
-							placeholder="3:52:30"
-						/>
-					</label>
-
-					<label class="block text-sm">
-						<span class="mb-1 block text-zinc-300">Pace</span>
-						<input
-							name="pace"
-							class="w-full rounded-md border border-white/10 bg-zinc-950 px-3 py-2 text-zinc-100"
-							placeholder="5:40 /km"
-						/>
-					</label>
-
-					<label class="block text-sm">
-						<span class="mb-1 block text-zinc-300">Placement</span>
-						<input
-							name="placement"
-							class="w-full rounded-md border border-white/10 bg-zinc-950 px-3 py-2 text-zinc-100"
-							placeholder="Top 18 Overall"
-						/>
-					</label>
-
-					<label class="block text-sm">
-						<span class="mb-1 block text-zinc-300">Strava URL</span>
-						<input
-							type="url"
-							name="stravaUrl"
-							class="w-full rounded-md border border-white/10 bg-zinc-950 px-3 py-2 text-zinc-100"
-							placeholder="https://strava.app.link/..."
-						/>
-					</label>
-
-					<label class="block text-sm md:col-span-2">
-						<span class="mb-1 block text-zinc-300">Image URL or `/medals/...` path</span>
-						<input
-							name="imageUrl"
-							class="w-full rounded-md border border-white/10 bg-zinc-950 px-3 py-2 text-zinc-100"
-							placeholder="/medals/legazpi_marathon_2026.webp"
-						/>
-					</label>
-
-					<label class="block text-sm md:col-span-2">
-						<span class="mb-1 block text-zinc-300">Description</span>
-						<textarea
-							name="description"
-							rows="4"
-							class="w-full rounded-md border border-white/10 bg-zinc-950 px-3 py-2 text-zinc-100"
-							placeholder="Race notes, conditions, and what made the event memorable."
-						></textarea>
-					</label>
-
-					<div class="md:col-span-2 flex flex-wrap items-center gap-3">
-						<button
-							type="submit"
-							class="rounded-full bg-blue-500/20 px-4 py-2 text-sm font-medium text-blue-100 hover:bg-blue-500/30"
-						>
-							Save achievement
-						</button>
-
-						{#if form?.message}
-							<p class="text-sm text-red-300">{form.message}</p>
-						{:else if form?.createAchievement?.success}
-							<p class="text-sm text-emerald-300">Achievement saved.</p>
-						{/if}
-					</div>
-				</form>
-			</section>
-		{:else}
+		{#if !isSignedIn}
 			<section class="rounded-2xl border border-white/10 bg-zinc-900/40 p-5 text-sm text-zinc-300">
 				Create an account to save your own race results, finish times, links, and medal images in
 				Postgres.
@@ -250,46 +148,48 @@
 		<div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 			{#if visibleEntries.length}
 				{#each visibleEntries as medal (medal.title)}
-				<button
-					type="button"
-					class="group cursor-pointer text-left"
-					onclick={() => (selectedMedal = medal)}
-				>
-					<article>
-						<div class="aspect-square overflow-hidden rounded-md ring-1 ring-inset ring-white/10">
-							{#if getCardSrc(medal)}
-								<img
-									src={getCardSrc(medal)}
-									srcset={getCardSrcSet(medal)}
-									sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-									alt={medal.title}
-									class="h-full w-full object-cover transition will-change-transform group-hover:scale-[1.01]"
-									loading="lazy"
-									decoding="async"
-								/>
-							{:else}
-								<div
-									class="flex h-full w-full items-center justify-center bg-zinc-900 text-[10px] font-medium uppercase tracking-[0.18em] text-zinc-500"
-								>
-									Coming Soon
-								</div>
-							{/if}
-						</div>
+					<button
+						type="button"
+						class="group cursor-pointer text-left"
+						onclick={() => (selectedMedal = medal)}
+					>
+						<article>
+							<div class="aspect-square overflow-hidden rounded-md ring-1 ring-inset ring-white/10">
+								{#if getCardSrc(medal)}
+									<img
+										src={getCardSrc(medal)}
+										srcset={getCardSrcSet(medal)}
+										sizes="(min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+										alt={medal.title}
+										class="h-full w-full object-cover transition will-change-transform group-hover:scale-[1.01]"
+										loading="lazy"
+										decoding="async"
+									/>
+								{:else}
+									<div
+										class="flex h-full w-full items-center justify-center bg-zinc-900 text-[10px] font-medium uppercase tracking-[0.18em] text-zinc-500"
+									>
+										Coming Soon
+									</div>
+								{/if}
+							</div>
 
-						<!-- <p class="mt-3 text-[10px] uppercase tracking-[0.22em] text-zinc-500">{medal.tag}</p> -->
-						<h3 class="mt-2 text-sm font-medium text-zinc-100">{medal.title}</h3>
-						{#if medal.distanceLabel}
-							<p class="mt-1 text-xs text-zinc-400">{medal.distanceLabel}</p>
-						{/if}
-					</article>
-				</button>
+							<!-- <p class="mt-3 text-[10px] uppercase tracking-[0.22em] text-zinc-500">{medal.tag}</p> -->
+							<h3 class="mt-2 text-sm font-medium text-zinc-100">{medal.title}</h3>
+							{#if medal.distanceLabel}
+								<p class="mt-1 text-xs text-zinc-400">{medal.distanceLabel}</p>
+							{/if}
+						</article>
+					</button>
 				{/each}
 			{:else}
-				<div class="col-span-full rounded-2xl border border-dashed border-white/10 bg-zinc-900/40 p-8 text-sm text-zinc-400">
+				<div
+					class="col-span-full rounded-2xl border border-dashed border-white/10 bg-zinc-900/40 p-8 text-sm text-zinc-400"
+				>
 					{#if active === 'Upcoming'}
 						No upcoming races match your search yet.
 					{:else if isSignedIn}
-						Your archive is empty. Add your first achievement above.
+						Your archive is empty. Add your first achievement to start your collection.
 					{:else}
 						No entries match your search.
 					{/if}
@@ -299,14 +199,200 @@
 	</div>
 </section>
 
-<a
-	href="https://www.strava.com"
-	target="_blank"
-	rel="noopener noreferrer external"
-	class="fixed bottom-5 right-8 z-60 inline-flex items-center rounded-full border border-[#FC4C02]/50 bg-[#FC4C02]/15 px-4 py-2 text-xs font-semibold text-[#FC4C02] shadow-lg shadow-black/30 backdrop-blur-sm transition hover:bg-[#FC4C02]/25 sm:bottom-6 sm:right-6"
->
-	Follow me on Strava
-</a>
+{#if isSignedIn}
+	<div class="fixed bottom-5 right-5 z-60 sm:bottom-6 sm:right-6">
+		<div
+			class="pointer-events-none absolute inset-0 rounded-full bg-blue-400/25 blur-md motion-safe:animate-pulse"
+		></div>
+		<button
+			type="button"
+			onclick={() => (showAddAchievement = true)}
+			class="relative inline-flex items-center cursor-pointer gap-2 rounded-full border border-blue-300/35 bg-zinc-950/75 px-4 py-2 text-xs font-semibold text-blue-100 shadow-lg shadow-black/30 backdrop-blur-sm ring-1 ring-white/10 transition hover:border-blue-200/60 hover:bg-blue-400/10 hover:text-white"
+			aria-label="Add achievement"
+		>
+			<span
+				class="grid h-5 w-5 place-items-center rounded-full bg-blue-300/15 text-sm leading-none text-blue-100 ring-1 ring-blue-200/25"
+			>
+				+
+			</span>
+			<span>Add achievement</span>
+		</button>
+	</div>
+{:else}
+	<a
+		href="https://www.strava.com"
+		target="_blank"
+		rel="noopener noreferrer external"
+		class="fixed bottom-5 right-5 z-60 inline-flex items-center rounded-full border border-[#FC4C02]/40 bg-zinc-950/75 px-4 py-2 text-xs font-semibold text-[#FC4C02] shadow-lg shadow-black/30 backdrop-blur-sm transition hover:border-[#FC4C02]/60 hover:bg-[#FC4C02]/10 sm:bottom-6 sm:right-6"
+	>
+		Follow on Strava
+	</a>
+{/if}
+
+{#if showAddAchievement}
+	<div class="fixed inset-0 z-70 overflow-y-auto" transition:fade={{ duration: 100 }}>
+		<button
+			type="button"
+			class="fixed inset-0 bg-black/60 backdrop-blur-[1px]"
+			aria-label="Close add achievement form"
+			onclick={() => (showAddAchievement = false)}
+		></button>
+
+		<div class="relative z-10 mx-auto flex min-h-full max-w-3xl items-center px-4 py-8 sm:px-6">
+			<div
+				role="dialog"
+				aria-modal="true"
+				aria-label="Add achievement"
+				class="w-full overflow-hidden rounded-2xl border border-white/10 bg-zinc-950 shadow-2xl shadow-black/50 ring-1 ring-white/5"
+				transition:scale={{ duration: 140, start: 0.98 }}
+			>
+				<div class="flex items-start gap-4 border-b border-white/10 p-5 sm:p-6">
+					<div>
+						<p class="text-xs font-medium uppercase tracking-[0.2em] text-blue-200/80">
+							New archive entry
+						</p>
+						<h2 class="mt-2 text-2xl font-semibold tracking-tight text-zinc-100">
+							Add an achievement
+						</h2>
+					</div>
+					<button
+						type="button"
+						class="ml-auto rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-zinc-300 hover:bg-white/10 hover:text-white"
+						onclick={() => (showAddAchievement = false)}
+					>
+						Close
+					</button>
+				</div>
+
+				<form
+					method="POST"
+					action="?/createAchievement"
+					use:enhance={() => {
+						return async ({ result, update }) => {
+							await update();
+							if (result.type === 'success') showAddAchievement = false;
+						};
+					}}
+					class="grid max-h-[calc(100vh-11rem)] gap-4 overflow-y-auto p-5 sm:grid-cols-2 sm:p-6"
+				>
+					<label class="block text-sm">
+						<span class="mb-1 block text-zinc-300">Title</span>
+						<input
+							name="title"
+							required
+							class="w-full rounded-md border border-white/10 bg-zinc-900 px-3 py-2.5 text-zinc-100 outline-none ring-blue-400/30 transition placeholder:text-zinc-600 focus:border-blue-300/50 focus:ring-4"
+							placeholder="Legazpi Marathon 2026"
+						/>
+					</label>
+
+					<label class="block text-sm">
+						<span class="mb-1 block text-zinc-300">Distance</span>
+						<input
+							name="distanceLabel"
+							class="w-full rounded-md border border-white/10 bg-zinc-900 px-3 py-2.5 text-zinc-100 outline-none ring-blue-400/30 transition placeholder:text-zinc-600 focus:border-blue-300/50 focus:ring-4"
+							placeholder="Full Marathon"
+						/>
+					</label>
+
+					<label class="block text-sm">
+						<span class="mb-1 block text-zinc-300">Event date</span>
+						<input
+							type="date"
+							name="eventDate"
+							class="w-full rounded-md border border-white/10 bg-zinc-900 px-3 py-2.5 text-zinc-100 outline-none ring-blue-400/30 transition focus:border-blue-300/50 focus:ring-4"
+						/>
+					</label>
+
+					<label class="block text-sm">
+						<span class="mb-1 block text-zinc-300">Location</span>
+						<input
+							name="location"
+							class="w-full rounded-md border border-white/10 bg-zinc-900 px-3 py-2.5 text-zinc-100 outline-none ring-blue-400/30 transition placeholder:text-zinc-600 focus:border-blue-300/50 focus:ring-4"
+							placeholder="Legazpi, Albay"
+						/>
+					</label>
+
+					<label class="block text-sm">
+						<span class="mb-1 block text-zinc-300">Finish time</span>
+						<input
+							name="finishTime"
+							class="w-full rounded-md border border-white/10 bg-zinc-900 px-3 py-2.5 text-zinc-100 outline-none ring-blue-400/30 transition placeholder:text-zinc-600 focus:border-blue-300/50 focus:ring-4"
+							placeholder="3:52:30"
+						/>
+					</label>
+
+					<label class="block text-sm">
+						<span class="mb-1 block text-zinc-300">Pace</span>
+						<input
+							name="pace"
+							class="w-full rounded-md border border-white/10 bg-zinc-900 px-3 py-2.5 text-zinc-100 outline-none ring-blue-400/30 transition placeholder:text-zinc-600 focus:border-blue-300/50 focus:ring-4"
+							placeholder="5:40 /km"
+						/>
+					</label>
+
+					<label class="block text-sm">
+						<span class="mb-1 block text-zinc-300">Placement</span>
+						<input
+							name="placement"
+							class="w-full rounded-md border border-white/10 bg-zinc-900 px-3 py-2.5 text-zinc-100 outline-none ring-blue-400/30 transition placeholder:text-zinc-600 focus:border-blue-300/50 focus:ring-4"
+							placeholder="Top 18 Overall"
+						/>
+					</label>
+
+					<label class="block text-sm">
+						<span class="mb-1 block text-zinc-300">Strava URL</span>
+						<input
+							type="url"
+							name="stravaUrl"
+							class="w-full rounded-md border border-white/10 bg-zinc-900 px-3 py-2.5 text-zinc-100 outline-none ring-blue-400/30 transition placeholder:text-zinc-600 focus:border-blue-300/50 focus:ring-4"
+							placeholder="https://strava.app.link/..."
+						/>
+					</label>
+
+					<label class="block text-sm sm:col-span-2">
+						<span class="mb-1 block text-zinc-300">Image URL or `/medals/...` path</span>
+						<input
+							name="imageUrl"
+							class="w-full rounded-md border border-white/10 bg-zinc-900 px-3 py-2.5 text-zinc-100 outline-none ring-blue-400/30 transition placeholder:text-zinc-600 focus:border-blue-300/50 focus:ring-4"
+							placeholder="/medals/legazpi_marathon_2026.webp"
+						/>
+					</label>
+
+					<label class="block text-sm sm:col-span-2">
+						<span class="mb-1 block text-zinc-300">Description</span>
+						<textarea
+							name="description"
+							rows="4"
+							class="w-full rounded-md border border-white/10 bg-zinc-900 px-3 py-2.5 text-zinc-100 outline-none ring-blue-400/30 transition placeholder:text-zinc-600 focus:border-blue-300/50 focus:ring-4"
+							placeholder="Race notes, conditions, and what made the event memorable."
+						></textarea>
+					</label>
+
+					<div class="flex flex-col gap-3 pt-2 sm:col-span-2 sm:flex-row sm:items-center">
+						<button
+							type="submit"
+							class="rounded-full bg-blue-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-blue-950/30 transition hover:bg-blue-400"
+						>
+							Save achievement
+						</button>
+
+						<button
+							type="button"
+							class="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium text-zinc-300 hover:bg-white/10 hover:text-white"
+							onclick={() => (showAddAchievement = false)}
+						>
+							Cancel
+						</button>
+
+						{#if form?.message}
+							<p class="text-sm text-red-300 sm:ml-auto">{form.message}</p>
+						{/if}
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+{/if}
 
 {#if selectedMedal}
 	<div class="fixed inset-0 z-70" transition:fade={{ duration: 100 }}>
