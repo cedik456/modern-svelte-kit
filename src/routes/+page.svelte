@@ -212,8 +212,7 @@
 
 		{#if !isSignedIn}
 			<section class="rounded-2xl border border-white/10 bg-zinc-900/40 p-5 text-sm text-zinc-300">
-				Create an account to save your own race results, finish times, links, and medal images in
-				Postgres.
+				Create an account to save your own race results, finish times, links, and medal images.
 			</section>
 		{/if}
 
