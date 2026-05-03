@@ -5,6 +5,7 @@ import { fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { db } from '$lib/server/db';
 import { achievement, achievementImage } from '$lib/server/db/schema';
+import { isDistanceLabel } from '$lib/data/distances';
 import type { Medal } from '$lib/types/medal';
 import { uploadAchievementImages } from '$lib/server/uploads';
 
@@ -122,6 +123,13 @@ export const actions: Actions = {
 			return fail(400, {
 				createAchievement: { success: false },
 				message: 'Title is required.'
+			});
+		}
+
+		if (distanceLabel && !isDistanceLabel(distanceLabel)) {
+			return fail(400, {
+				createAchievement: { success: false },
+				message: 'Choose a valid distance.'
 			});
 		}
 

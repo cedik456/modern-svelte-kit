@@ -1,4 +1,5 @@
 import type { Medal } from '$lib/types/medal';
+import { DISTANCES } from '$lib/data/distances';
 
 export const medals: Medal[] = [
 	// ===== 2026 =====
@@ -27,7 +28,7 @@ export const medals: Medal[] = [
 	{
 		title: 'Legazpi Marathon 2026',
 		tag: 'Collection Item',
-		distanceLabel: 'Full Marathon',
+		distanceLabel: DISTANCES.FULL_MARATHON,
 		eventDate: 'April 26, 2026',
 		location: 'Legazpi, Albay',
 		finishTime: '3:52:30',
@@ -43,7 +44,7 @@ export const medals: Medal[] = [
 	{
 		title: 'Summer Fitness Run 2026',
 		tag: 'Collection Item',
-		distanceLabel: '10 Kilometer Run',
+		distanceLabel: DISTANCES.TEN_KILOMETER_RUN,
 		eventDate: 'April 11, 2026',
 		location: 'Legazpi, Albay',
 		finishTime: '47:31',
@@ -59,7 +60,7 @@ export const medals: Medal[] = [
 	{
 		title: 'Cagsawa Half Marathon',
 		tag: 'Collection Item',
-		distanceLabel: 'Half Marathon',
+		distanceLabel: DISTANCES.HALF_MARATHON,
 		eventDate: 'February 22, 2026',
 		location: 'Legazpi, Albay',
 		finishTime: '2:07:28',
@@ -75,7 +76,7 @@ export const medals: Medal[] = [
 	{
 		title: 'Love Run Half Marathon',
 		tag: 'Collection Item',
-		distanceLabel: 'Half Marathon',
+		distanceLabel: DISTANCES.HALF_MARATHON,
 		eventDate: 'February 15, 2026',
 		location: 'Legazpi, Albay',
 		finishTime: '1:53:08',
@@ -91,7 +92,7 @@ export const medals: Medal[] = [
 	{
 		title: 'Trenta',
 		tag: 'Collection Item',
-		distanceLabel: '30 Kilometer Run',
+		distanceLabel: DISTANCES.THIRTY_KILOMETER_RUN,
 		eventDate: 'January 25, 2026',
 		location: 'Sto. Domingo, Albay',
 		finishTime: '2:46:00',
@@ -110,7 +111,7 @@ export const medals: Medal[] = [
 	{
 		title: 'Charity Run 2025',
 		tag: 'Collection Item',
-		distanceLabel: '25 Kilometer Run',
+		distanceLabel: DISTANCES.TWENTY_FIVE_KILOMETER_RUN,
 		eventDate: 'December 14, 2025',
 		location: 'Legazpi, Albay',
 		finishTime: '2:46:00',
@@ -126,7 +127,7 @@ export const medals: Medal[] = [
 	{
 		title: 'Albay Half Marathon',
 		tag: 'Collection Item',
-		distanceLabel: 'Half Marathon',
+		distanceLabel: DISTANCES.HALF_MARATHON,
 		eventDate: 'November 23, 2025',
 		location: 'Legazpi, Albay',
 		finishTime: '2:07:33',
@@ -142,7 +143,7 @@ export const medals: Medal[] = [
 	{
 		title: 'Sorsogon City Half Marathon',
 		tag: 'Collection Item',
-		distanceLabel: 'Half Marathon',
+		distanceLabel: DISTANCES.HALF_MARATHON,
 		eventDate: 'November 16, 2025',
 		location: 'Sorsogon City',
 		finishTime: '2:05:30',
@@ -158,7 +159,7 @@ export const medals: Medal[] = [
 	{
 		title: 'Sorsogon Halloween Night Run',
 		tag: 'Collection Item',
-		distanceLabel: '10 Kilometer Run',
+		distanceLabel: DISTANCES.TEN_KILOMETER_RUN,
 		eventDate: 'November 1, 2025',
 		location: 'Sorsogon City',
 		finishTime: '51:49',
@@ -174,7 +175,7 @@ export const medals: Medal[] = [
 	{
 		title: 'Strides and Shine',
 		tag: 'Collection Item',
-		distanceLabel: '16 Kilometer Run',
+		distanceLabel: DISTANCES.SIXTEEN_KILOMETER_RUN,
 		eventDate: 'October 18, 2025',
 		location: 'Legazpi, Albay',
 		finishTime: '2:03:40',
@@ -190,7 +191,7 @@ export const medals: Medal[] = [
 	{
 		title: 'Milo Half Marathon',
 		tag: 'Collection Item',
-		distanceLabel: 'Half Marathon',
+		distanceLabel: DISTANCES.HALF_MARATHON,
 		eventDate: 'October 18, 2025',
 		location: 'Sorsogon City',
 		finishTime: '1:53:38',
@@ -206,7 +207,7 @@ export const medals: Medal[] = [
 	{
 		title: 'The Epic Glow Night Run',
 		tag: 'Collection Item',
-		distanceLabel: '10 Kilometer Run',
+		distanceLabel: DISTANCES.TEN_KILOMETER_RUN,
 		eventDate: 'October 4, 2025',
 		location: 'Legazpi, Albay',
 		finishTime: '53:36',
@@ -222,7 +223,7 @@ export const medals: Medal[] = [
 	{
 		title: 'Gubat Half Marathon',
 		tag: 'Collection Item',
-		distanceLabel: 'Half Marathon',
+		distanceLabel: DISTANCES.HALF_MARATHON,
 		eventDate: 'August 31, 2025',
 		location: 'Gubat, Sorsogon',
 		finishTime: '2:06:14',
@@ -236,7 +237,7 @@ export const medals: Medal[] = [
 	{
 		title: 'Guinobatan Longganisa Festival Fun Run 2025',
 		tag: 'Collection Item',
-		distanceLabel: '10 Kilometer Run',
+		distanceLabel: DISTANCES.TEN_KILOMETER_RUN,
 		eventDate: 'August 10, 2025',
 		location: 'Guinobatan, Albay',
 		finishTime: '54:50',
@@ -250,7 +251,7 @@ export const medals: Medal[] = [
 	{
 		title: 'Pinangat Festival 10 Miler Run',
 		tag: 'Collection Item',
-		distanceLabel: '10-Mile Run',
+		distanceLabel: DISTANCES.TEN_MILE_RUN,
 		eventDate: 'July 20, 2025',
 		location: 'Camalig, Albay',
 		finishTime: '1:34:15',
@@ -265,7 +266,7 @@ export const medals: Medal[] = [
 	{
 		title: 'First Legazpi Marathon',
 		tag: 'Collection Item',
-		distanceLabel: 'Half Marathon',
+		distanceLabel: DISTANCES.HALF_MARATHON,
 		eventDate: 'June 1, 2025',
 		location: 'Legazpi, Albay',
 		finishTime: '2:24:01',

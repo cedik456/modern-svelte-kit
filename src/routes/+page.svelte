@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
+	import { DISTANCE_OPTIONS, DISTANCES } from '$lib/data/distances';
 	import { medals } from '$lib/data/medals';
 	import { upcomingRaces } from '$lib/data/races';
 	import { archiveSearch } from '$lib/stores/archive';
@@ -9,14 +10,12 @@
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
-	const filters = [
-		'All Entries',
-		'Full Marathon',
-		'Half Marathon',
-		'Upcoming',
-		'Other Distances'
-	] as const;
-	let active = $state<(typeof filters)[number]>('All Entries');
+	const archiveFilters = ['All Entries', DISTANCES.FULL_MARATHON, DISTANCES.HALF_MARATHON, 'Other Distances'] as const;
+	const marketingFilters = [...archiveFilters, 'Upcoming'] as const;
+	type ArchiveFilter = (typeof archiveFilters)[number];
+	type MarketingFilter = (typeof marketingFilters)[number];
+
+	let active = $state<MarketingFilter>('All Entries');
 	let selectedMedal = $state<Medal | null>(null);
 	let selectedModalImageIndex = $state(0);
 	let showAddAchievement = $state(false);
@@ -100,17 +99,17 @@
 		return haystack.includes(q);
 	}
 
-	function matchesFilter(medal: Medal, filter: (typeof filters)[number]) {
+	function matchesFilter(medal: Medal, filter: ArchiveFilter) {
 		const distance = medal.distanceLabel?.toLowerCase() ?? '';
 
 		if (filter === 'All Entries') return true;
 
-		if (filter === 'Full Marathon') {
-			return distance.includes('full marathon');
+		if (filter === DISTANCES.FULL_MARATHON) {
+			return distance.includes(DISTANCES.FULL_MARATHON.toLowerCase());
 		}
 
-		if (filter === 'Half Marathon') {
-			return distance.includes('half marathon');
+		if (filter === DISTANCES.HALF_MARATHON) {
+			return distance.includes(DISTANCES.HALF_MARATHON.toLowerCase());
 		}
 
 		if (filter === 'Other Distances') {
@@ -123,10 +122,12 @@
 	let searchQuery = $derived($archiveSearch.trim().toLowerCase());
 	let isSignedIn = $derived(Boolean(data.user));
 	let archiveEntries = $derived(isSignedIn ? data.achievements : medals);
+	let availableFilters = $derived(isSignedIn ? archiveFilters : marketingFilters);
+	let activeArchiveFilter = $derived(active === 'Upcoming' ? 'All Entries' : active);
 
 	let filteredMedals = $derived(
 		archiveEntries.filter(
-			(medal) => matchesSearch(medal, searchQuery) && matchesFilter(medal, active)
+			(medal) => matchesSearch(medal, searchQuery) && matchesFilter(medal, activeArchiveFilter)
 		)
 	);
 
@@ -134,7 +135,13 @@
 		upcomingRaces.filter((race) => matchesSearch(race, searchQuery))
 	);
 
-	let visibleEntries = $derived(active === 'Upcoming' ? filteredUpcomingRaces : filteredMedals);
+	let visibleEntries = $derived(active === 'Upcoming' && !isSignedIn ? filteredUpcomingRaces : filteredMedals);
+
+	$effect(() => {
+		if (isSignedIn && active === 'Upcoming') {
+			active = 'All Entries';
+		}
+	});
 </script>
 
 <svelte:window
@@ -169,7 +176,7 @@
 					class="-mx-4 max-w-[calc(100vw-2rem)] overflow-x-auto overflow-y-hidden px-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden sm:mx-0 sm:max-w-full sm:px-0"
 				>
 					<div class="flex w-max items-center gap-2 sm:w-auto sm:flex-wrap">
-						{#each filters as filter (filter)}
+						{#each availableFilters as filter (filter)}
 							<button
 								type="button"
 								onclick={() => (active = filter)}
@@ -240,7 +247,7 @@
 				<div
 					class="col-span-full rounded-2xl border border-dashed border-white/10 bg-zinc-900/40 p-6 text-sm text-zinc-400 sm:p-8"
 				>
-					{#if active === 'Upcoming'}
+					{#if active === 'Upcoming' && !isSignedIn}
 						No upcoming races match your search yet.
 					{:else if isSignedIn}
 						Your archive is empty. Add your first achievement to start your collection.
@@ -345,11 +352,15 @@
 
 					<label class="block text-sm">
 						<span class="mb-1 block text-zinc-300">Distance</span>
-						<input
+						<select
 							name="distanceLabel"
-							class="w-full rounded-md border border-white/10 bg-zinc-900 px-3 py-2.5 text-zinc-100 outline-none ring-blue-400/30 transition placeholder:text-zinc-600 focus:border-blue-300/50 focus:ring-4"
-							placeholder="Full Marathon"
-						/>
+							class="w-full rounded-md border border-white/10 bg-zinc-900 px-3 py-2.5 text-zinc-100 outline-none ring-blue-400/30 transition focus:border-blue-300/50 focus:ring-4"
+						>
+							<option value="">Select a distance</option>
+							{#each DISTANCE_OPTIONS as distance}
+								<option value={distance}>{distance}</option>
+							{/each}
+						</select>
 					</label>
 
 					<label class="block text-sm">
