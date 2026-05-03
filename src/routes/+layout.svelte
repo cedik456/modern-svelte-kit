@@ -62,7 +62,7 @@
 				</div>
 
 				{#if user}
-					<form method="POST" action="/logout" class="hidden sm:block">
+					<form method="POST" action="/auth/logout" class="hidden sm:block">
 						<button
 							type="submit"
 							class="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-zinc-200 hover:bg-white/10 hover:text-white"
@@ -71,12 +71,20 @@
 						</button>
 					</form>
 				{:else}
-					<a
-						href={resolve('/auth/login')}
-						class="hidden rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-zinc-200 hover:bg-white/10 hover:text-white sm:inline-flex"
-					>
-						Login
-					</a>
+					<div class="hidden items-center gap-2 sm:flex">
+						<a
+							href={resolve('/auth/login')}
+							class="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs font-medium text-zinc-200 hover:bg-white/10 hover:text-white"
+						>
+							Login
+						</a>
+						<a
+							href={resolve('/auth/signup')}
+							class="rounded-full bg-blue-500 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-400"
+						>
+							Sign up
+						</a>
+					</div>
 				{/if}
 			</div>
 		</div>
@@ -110,6 +118,16 @@
 			<nav class="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-xs text-zinc-300">
 				<a href={resolve('/')} class="hover:text-white">Archive</a>
 				<a href={resolve('/')} class="hover:text-white">About</a>
+				{#if user}
+					<form method="POST" action="/auth/logout">
+						<button type="submit" class="hover:text-white">Logout</button>
+					</form>
+				{:else}
+					<a href={resolve('/auth/login')} class="hover:text-white">Login</a>
+					<a href={resolve('/auth/signup')} class="font-medium text-blue-200 hover:text-blue-100">
+						Sign up
+					</a>
+				{/if}
 			</nav>
 		</div>
 	</header>

@@ -30,7 +30,10 @@ export const achievement = pgTable(
 			.$onUpdate(() => /* @__PURE__ */ new Date())
 			.notNull()
 	},
-	(table) => [index('achievement_user_id_idx').on(table.userId), index('achievement_event_date_idx').on(table.eventDate)]
+	(table) => [
+		index('achievement_user_id_idx').on(table.userId),
+		index('achievement_event_date_idx').on(table.eventDate)
+	]
 );
 
 export * from './auth.schema';
