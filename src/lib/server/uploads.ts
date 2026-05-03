@@ -35,6 +35,11 @@ function assertBlobConfigured() {
 	}
 }
 
+function getBlobToken() {
+	assertBlobConfigured();
+	return env.BLOB_READ_WRITE_TOKEN;
+}
+
 async function processVariant(
 	buffer: Buffer,
 	maxWidth: number,
@@ -78,7 +83,7 @@ export async function uploadAchievementImages(
 	files: File[],
 	options: { userId: string; title: string }
 ): Promise<ProcessedUpload[]> {
-	assertBlobConfigured();
+	const token = getBlobToken();
 	validateUploadFiles(files);
 
 	const uploadedUrls: string[] = [];
@@ -98,17 +103,15 @@ export async function uploadAchievementImages(
 					put(`achievements/${baseName}-full.webp`, mainImage.data, {
 						access: 'public',
 						contentType: 'image/webp',
-						addRandomSuffix: false
+						addRandomSuffix: false,
+						token
 					}),
-					put(
-						`achievements/${baseName}-thumb.webp`,
-						thumbnailImage.data,
-						{
-							access: 'public',
-							contentType: 'image/webp',
-							addRandomSuffix: false
-						}
-					)
+					put(`achievements/${baseName}-thumb.webp`, thumbnailImage.data, {
+						access: 'public',
+						contentType: 'image/webp',
+						addRandomSuffix: false,
+						token
+					})
 				]);
 
 				uploadedUrls.push(fullBlob.url, thumbnailBlob.url);
@@ -126,7 +129,7 @@ export async function uploadAchievementImages(
 		);
 	} catch (error) {
 		if (uploadedUrls.length) {
-			await del(uploadedUrls);
+			await del(uploadedUrls, { token });
 		}
 
 		throw error;

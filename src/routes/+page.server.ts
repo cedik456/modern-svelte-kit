@@ -1,5 +1,6 @@
 import { asc, desc, eq, inArray } from 'drizzle-orm';
 import { del } from '@vercel/blob';
+import { env } from '$env/dynamic/private';
 import { fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { db } from '$lib/server/db';
@@ -21,7 +22,7 @@ function toDisplayDate(value: string | null) {
 
 function toMedal(
 	record: typeof achievement.$inferSelect,
-	images: typeof achievementImage.$inferSelect[]
+	images: (typeof achievementImage.$inferSelect)[]
 ): Medal {
 	const medalImages = images.map((image) => ({
 		id: image.id,
@@ -80,7 +81,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 				.orderBy(asc(achievementImage.sortOrder), asc(achievementImage.id))
 		: [];
 
-	const imagesByAchievement = new Map<number, typeof achievementImage.$inferSelect[]>();
+	const imagesByAchievement = new Map<number, (typeof achievementImage.$inferSelect)[]>();
 	for (const image of images) {
 		const current = imagesByAchievement.get(image.achievementId) ?? [];
 		current.push(image);
@@ -88,7 +89,9 @@ export const load: PageServerLoad = async ({ locals }) => {
 	}
 
 	return {
-		achievements: achievements.map((entry) => toMedal(entry, imagesByAchievement.get(entry.id) ?? []))
+		achievements: achievements.map((entry) =>
+			toMedal(entry, imagesByAchievement.get(entry.id) ?? [])
+		)
 	};
 };
 
@@ -182,7 +185,12 @@ export const actions: Actions = {
 			}
 		} catch (error) {
 			if (uploadedImages.length) {
-				await del(uploadedImages.flatMap((image) => [image.fullUrl, image.thumbnailUrl]));
+				await del(
+					uploadedImages.flatMap((image) => [image.fullUrl, image.thumbnailUrl]),
+					{
+						token: env.BLOB_READ_WRITE_TOKEN
+					}
+				);
 			}
 
 			throw error;
