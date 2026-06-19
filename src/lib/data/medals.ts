@@ -26,6 +26,22 @@ export const medals: Medal[] = [
 	// 	location: 'Legazpi, Albay'
 	// },
 	{
+		title: 'Ciudad de Sorsogon Marathon 2026',
+		tag: 'Collection Item',
+		distanceLabel: DISTANCES.FULL_MARATHON,
+		eventDate: 'June 14, 2026',
+		location: 'Sorsogon City',
+		finishTime: '4:12:00',
+		pace: '5:50 /km',
+		placement: 'Top 5 Overall', // improved
+		stravaUrl: 'https://strava.app.link/g4SPjCCM2b',
+		description:
+			'This one was a learning experience for me, i failed but got back up at the same time, It was my first time doing the run and walk method. Still grateful that i was able to finish it.',
+		src: '/medals/ciudad_de_sorsogon_marathon_2026.webp',
+		thumbnailSrc: '/medals/ciudad_de_sorsogon_marathon_2026-thumb.webp',
+		fullSrc: '/medals/ciudad_de_sorsogon_marathon_2026.webp'
+	},
+	{
 		title: 'Legazpi Marathon 2026',
 		tag: 'Collection Item',
 		distanceLabel: DISTANCES.FULL_MARATHON,
